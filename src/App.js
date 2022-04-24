@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 
 import Navbar from "./components/Navbar/Navbar";
+import Register from "./components/Register/Register";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -24,7 +25,7 @@ function App() {
     <BrowserRouter>
       <Navbar isLoggedIn={false} />
       <Routes>
-        <Route path="login" element={<div>Hello</div>}></Route>
+        <Route path="register" element={<Register />}></Route>
       </Routes>
     </BrowserRouter>
   );

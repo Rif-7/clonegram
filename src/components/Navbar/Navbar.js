@@ -30,14 +30,14 @@ const Navbar = () => {
         <Link to="login">Login</Link>
       </li>
       <li className="nav-link">
-        <Link to="#">SignUp</Link>
+        <Link to="register">SignUp</Link>
       </li>
     </>
   );
 
   return (
     <nav>
-      <Link className="nav-header" to="#">
+      <Link className="nav-header" to="/">
         Clonegram
       </Link>
       <ul className="nav-links">{renderedListItems}</ul>
