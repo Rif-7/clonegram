@@ -1,8 +1,11 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import { BrowserRouter } from "react-router-dom";
 
 import { initializeApp } from "firebase/app";
+
+import Navbar from "./components/Navbar/Navbar";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -18,7 +21,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 function App() {
-  return <div className="App"></div>;
+  return (
+    <BrowserRouter>
+      <Navbar isLoggedIn={false} />
+    </BrowserRouter>
+  );
 }
 
 export default App;
