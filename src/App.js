@@ -1,7 +1,6 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { initializeApp } from "firebase/app";
 
@@ -24,6 +23,9 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar isLoggedIn={false} />
+      <Routes>
+        <Route path="login" element={<div>Hello</div>}></Route>
+      </Routes>
     </BrowserRouter>
   );
 }

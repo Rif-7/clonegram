@@ -1,8 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+import { useDispatch, useSelector } from "react-redux";
+import { userLoggedOut } from "../../features/user/userSlice";
 
-const Navbar = ({ isLoggedIn }) => {
+const Navbar = () => {
+  const isLoggedIn = useSelector((state) => state.user.user);
+
+  const dispatch = useDispatch();
+  const logoutUser = () => {
+    dispatch(userLoggedOut());
+  };
+
   // if user is logged show option to logout else show options to login in
   const renderedListItems = isLoggedIn ? (
     <>
@@ -10,13 +19,15 @@ const Navbar = ({ isLoggedIn }) => {
         <Link to="#">Profile</Link>
       </li>
       <li className="nav-link">
-        <Link to="#">Logout</Link>
+        <Link to="#" onClick={logoutUser}>
+          Logout
+        </Link>
       </li>
     </>
   ) : (
     <>
       <li className="nav-link">
-        <Link to="#">Login</Link>
+        <Link to="login">Login</Link>
       </li>
       <li className="nav-link">
         <Link to="#">SignUp</Link>
