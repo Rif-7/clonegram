@@ -72,6 +72,7 @@ input {
 .error-field {
     color: red;
     font-size: 18px;
+    width: 90%;
 }
 
 .success-field {

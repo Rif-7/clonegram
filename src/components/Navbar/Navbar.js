@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLoggedOut } from "../../features/user/userSlice";
 
 const Navbar = () => {
-  const isLoggedIn = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
   const logoutUser = () => {
@@ -13,10 +13,10 @@ const Navbar = () => {
   };
 
   // if user is logged show option to logout else show options to login in
-  const renderedListItems = isLoggedIn ? (
+  const renderedListItems = user ? (
     <>
       <li className="nav-link">
-        <Link to="#">Profile</Link>
+        <Link to="#">{user}</Link>
       </li>
       <li className="nav-link">
         <Link to="#" onClick={logoutUser}>

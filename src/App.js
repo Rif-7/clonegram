@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 
 import { initializeApp } from "firebase/app";
 
@@ -20,6 +21,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+const auth = getAuth(app);
+
 function App() {
   return (
     <BrowserRouter>
@@ -30,5 +33,7 @@ function App() {
     </BrowserRouter>
   );
 }
+
+export { auth };
 
 export default App;
