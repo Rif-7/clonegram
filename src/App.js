@@ -7,6 +7,7 @@ import { initializeApp } from "firebase/app";
 
 import Navbar from "./components/Navbar/Navbar";
 import Register from "./components/Register/Register";
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -22,6 +23,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+const store = getFirestore(app);
 
 function App() {
   return (
@@ -34,6 +36,6 @@ function App() {
   );
 }
 
-export { auth };
+export { auth, store };
 
 export default App;

@@ -16,6 +16,7 @@
     justify-self: center;
     box-shadow: 8px 0px 8px #888, -8px 0px 8px #888;
     text-align: center;
+    overflow-y: auto;
 }
 
 form {
@@ -30,7 +31,7 @@ label {
     align-self: flex-start;
 }
 
-input {
+input, textarea {
     width: 250px;
     height: 30px;
     font-size: 18px;
@@ -45,7 +46,7 @@ input {
     align-items: center;
 }
 
-.next-btn {
+.submit-btn {
     font-size: 24px;
     background-color: #AFC1D6;
     border-radius: 4px;
@@ -59,7 +60,7 @@ input {
     transition: 250ms;
 }
 
-.next-btn:hover {
+.submit-btn:hover {
     box-shadow: inset var(--next-btn-width) 0 0 0 #655A7C;
 }
 
@@ -67,6 +68,7 @@ input {
     font-size: 32px;
     color: #655A7C;
     font-weight: 700;
+    margin: 32px;
 }
 
 .error-field {
@@ -79,4 +81,13 @@ input {
     color: green;
     font-size: 24px;
     font-weight: 700;
+}
+
+textarea {
+    height: 150px;
+    resize: none;
+}
+
+p {
+    margin: 8px;
 }
