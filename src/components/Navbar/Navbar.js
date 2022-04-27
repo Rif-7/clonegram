@@ -3,13 +3,21 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { useDispatch, useSelector } from "react-redux";
 import { userLoggedOut } from "../../features/user/userSlice";
+import { signOut } from "firebase/auth";
+import { auth } from "../../App";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
   const logoutUser = () => {
-    dispatch(userLoggedOut());
+    signOut(auth)
+      .then(() => {
+        dispatch(userLoggedOut());
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   // if user is logged show option to logout else show options to login in

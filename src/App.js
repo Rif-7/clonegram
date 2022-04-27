@@ -1,13 +1,14 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import { initializeApp } from "firebase/app";
 
 import Navbar from "./components/Navbar/Navbar";
 import Register from "./components/Register/Register";
 import { getFirestore } from "firebase/firestore";
+import { userLoggedOut } from "./features/user/userSlice";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -24,6 +25,12 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 const store = getFirestore(app);
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    userLoggedOut();
+  }
+});
 
 function App() {
   return (

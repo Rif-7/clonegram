@@ -5,7 +5,9 @@ import { addDoc, collection } from "firebase/firestore";
 
 import { auth, store } from "../../App";
 import { userLoggedIn } from "../../features/user/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { Navigate } from "react-router-dom";
 
 import UserProfileForm from "./Forms/UserProfileForm";
 import RegisterForm from "./Forms/RegisterForm";
@@ -13,6 +15,7 @@ import RegisterForm from "./Forms/RegisterForm";
 const Register = () => {
   const [accountCreated, setAccountCreated] = useState(false);
   const [uid, setUID] = useState(null);
+  const isLoggedIn = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
   const onAccountCreated = (userCredentials) => {
@@ -53,6 +56,11 @@ const Register = () => {
         submitBtn.current.disabled = false;
       });
   };
+
+  // If/When the user is logged in redirect to the homepage
+  if (isLoggedIn) {
+    return <Navigate replace to="/" />;
+  }
 
   return (
     <div className="login-container">
