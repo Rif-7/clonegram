@@ -1,8 +1,11 @@
-import React, { createRef } from "react";
+import React, { createRef, useState } from "react";
 import { useForm } from "react-hook-form";
+
+import LoadingFormIndicator from "./LoadingFormIndicator";
 
 const UserProfileForm = ({ createUserProfile }) => {
   const createBtn = createRef();
+  const [currentFormState, setCurrentFormState] = useState("idle");
 
   const {
     register,
@@ -11,7 +14,10 @@ const UserProfileForm = ({ createUserProfile }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    createUserProfile(data, createBtn);
+    setCurrentFormState("loading");
+    createUserProfile(data, createBtn).then(() => {
+      setCurrentFormState("idle");
+    });
   };
 
   return (
@@ -58,9 +64,13 @@ const UserProfileForm = ({ createUserProfile }) => {
         ></textarea>
       </div>
       <p className="error-field">{errors[Object.keys(errors)[0]]?.message}</p>
-      <button className="submit-btn" ref={createBtn}>
-        Create
-      </button>
+      {currentFormState === "idle" ? (
+        <button className="submit-btn" ref={createBtn}>
+          Create
+        </button>
+      ) : (
+        <LoadingFormIndicator />
+      )}
     </form>
   );
 };

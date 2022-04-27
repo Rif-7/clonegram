@@ -20,9 +20,9 @@ const Register = () => {
     setUID(userCredentials.user.uid);
   };
 
-  const createUserAccount = (data) => {
+  const createUserAccount = async (data) => {
     const { email, password } = data;
-    createUserWithEmailAndPassword(auth, email, password)
+    return createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         onAccountCreated(userCredentials);
       })
@@ -31,14 +31,14 @@ const Register = () => {
       });
   };
 
-  const createUserProfile = (userData, submitBtn) => {
+  const createUserProfile = async (userData, submitBtn) => {
     submitBtn.current.disabled = true;
     if (!uid) {
       console.log("No UID Found");
       return;
     }
     const { username, dateOfBirth, description = "" } = userData;
-    addDoc(collection(store, "users"), {
+    return addDoc(collection(store, "users"), {
       uid,
       username,
       dateOfBirth,

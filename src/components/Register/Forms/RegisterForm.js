@@ -1,8 +1,11 @@
 import React, { useEffect, useState, createRef } from "react";
 import { useForm } from "react-hook-form";
 
+import LoadingFormIndicator from "./LoadingFormIndicator";
+
 const RegisterForm = ({ createAccount }) => {
   const [customError, setCustomError] = useState("");
+  const [currentFormState, setCurrentFormState] = useState("idle");
   const nextBtn = createRef();
 
   const {
@@ -13,7 +16,9 @@ const RegisterForm = ({ createAccount }) => {
   } = useForm();
 
   useEffect(() => {
-    nextBtn.current.click();
+    if (nextBtn.current) {
+      nextBtn.current.click();
+    }
   }, []);
 
   const updateError = (value) => {
@@ -26,8 +31,15 @@ const RegisterForm = ({ createAccount }) => {
     if (customError !== null) {
       return;
     }
+    setCurrentFormState("loading");
     nextBtn.current.disabled = true;
-    createAccount(data);
+    createAccount(data)
+      .then(() => {
+        setCurrentFormState("idle");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const password = watch("password");
@@ -90,9 +102,13 @@ const RegisterForm = ({ createAccount }) => {
         ></input>
       </div>
 
-      <button className="next-btn submit-btn" ref={nextBtn}>
-        Next
-      </button>
+      {currentFormState === "idle" ? (
+        <button className="next-btn submit-btn" ref={nextBtn}>
+          Next
+        </button>
+      ) : (
+        <LoadingFormIndicator />
+      )}
 
       {customError ? (
         <p className="error-field">{customError}</p>
