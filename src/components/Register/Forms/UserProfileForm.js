@@ -36,7 +36,7 @@ const UserProfileForm = ({ createUserProfile }) => {
             },
             maxLength: {
               value: "12",
-              message: "Username Should Be Less than 12 Characters",
+              message: "Username Should Be Less than 20 Characters",
             },
             pattern: {
               value: /^[a-zA-Z0-9-]+$/,

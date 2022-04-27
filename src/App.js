@@ -7,6 +7,8 @@ import { initializeApp } from "firebase/app";
 
 import Navbar from "./components/Navbar/Navbar";
 import Register from "./components/Register/Register";
+import Login from "./components/Register/Login";
+
 import { getFirestore } from "firebase/firestore";
 import { userLoggedOut } from "./features/user/userSlice";
 
@@ -37,6 +39,7 @@ function App() {
     <BrowserRouter>
       <Navbar isLoggedIn={false} />
       <Routes>
+        <Route path="login" element={<Login />}></Route>
         <Route path="register" element={<Register />}></Route>
       </Routes>
     </BrowserRouter>
