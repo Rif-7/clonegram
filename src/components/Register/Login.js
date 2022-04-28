@@ -1,6 +1,6 @@
 import React from "react";
 
-import { query, where, collection, getDocs } from "firebase/firestore";
+import { query, where, collection, getDocs, limit } from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, store } from "../../App";
 
@@ -22,7 +22,8 @@ const Login = () => {
         const uid = userCredentials.user.uid;
         const userRef = query(
           collection(store, "users"),
-          where("uid", "==", uid)
+          where("uid", "==", uid),
+          limit(1)
         );
         const userDoc = await getDocs(userRef);
         // get the first matching result
@@ -32,7 +33,7 @@ const Login = () => {
         );
       })
       .catch((error) => {
-        console.log(error);
+        return error.code;
       });
   };
 

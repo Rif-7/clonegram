@@ -6,6 +6,7 @@ import LoadingFormIndicator from "./LoadingFormIndicator";
 const UserProfileForm = ({ createUserProfile }) => {
   const createBtn = createRef();
   const [currentFormState, setCurrentFormState] = useState("idle");
+  const [customError, setCustomError] = useState(null);
 
   const {
     register,
@@ -15,10 +16,20 @@ const UserProfileForm = ({ createUserProfile }) => {
 
   const onSubmit = (data) => {
     setCurrentFormState("loading");
-    createUserProfile(data, createBtn).then(() => {
+    createUserProfile(data, createBtn).then((result) => {
+      if (result === "User Already Exists") {
+        setCustomError("Username Taken");
+      } else if (result === "An Error Has Occured") {
+        setCustomError(result);
+      }
       setCurrentFormState("idle");
     });
   };
+
+  const error = errors[Object.keys(errors)[0]]?.message;
+  if (error && customError) {
+    setCustomError(null);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -36,7 +47,7 @@ const UserProfileForm = ({ createUserProfile }) => {
             },
             maxLength: {
               value: "12",
-              message: "Username Should Be Less than 20 Characters",
+              message: "Username Should Be Less than 30 Characters",
             },
             pattern: {
               value: /^[a-zA-Z0-9-]+$/,
@@ -63,7 +74,7 @@ const UserProfileForm = ({ createUserProfile }) => {
           {...register("description")}
         ></textarea>
       </div>
-      <p className="error-field">{errors[Object.keys(errors)[0]]?.message}</p>
+      <p className="error-field">{error || customError}</p>
       {currentFormState === "idle" ? (
         <button className="submit-btn" ref={createBtn}>
           Create

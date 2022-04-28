@@ -4,6 +4,7 @@ import LoadingFormIndicator from "./LoadingFormIndicator";
 
 const LoginForm = ({ loginUser }) => {
   const [currentFormState, setCurrentFormState] = useState("idle");
+  const [customError, setCustomError] = useState(null);
   const {
     register,
     formState: { errors },
@@ -12,17 +13,28 @@ const LoginForm = ({ loginUser }) => {
 
   const onSubmit = (data) => {
     setCurrentFormState("loading");
-    loginUser(data).then(() => {
+    loginUser(data).then((result) => {
+      if (result === "auth/user-not-found") {
+        setCustomError("Invalid Email/Password");
+        setCurrentFormState("idle");
+        return;
+      }
+      setCustomError(null);
       setCurrentFormState("idle");
     });
   };
+
+  const error = errors[Object.keys(errors)[0]]?.message;
+  if (error && customError) {
+    setCustomError(null);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="input-field">
         <label htmlFor="email">Email: </label>
         <input
-          type="email"
+          type="text"
           id="email"
           placeholder="example@domain.com"
           {...register("email", {
@@ -42,11 +54,11 @@ const LoginForm = ({ loginUser }) => {
           type="password"
           id="password"
           placeholder="Enter Your Password"
-          {...register("password")}
+          {...register("password", { required: "Password Is Required" })}
         ></input>
       </div>
 
-      <p className="error-field">{errors[Object.keys(errors)[0]]?.message}</p>
+      <p className="error-field">{error || customError}</p>
 
       {currentFormState === "idle" ? (
         <button className="submit-btn">Login</button>

@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import "./Register.css";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  query,
+  where,
+  limit,
+  getDocs,
+} from "firebase/firestore";
 
 import { auth, store } from "../../App";
 import { userLoggedIn } from "../../features/user/userSlice";
@@ -30,7 +37,8 @@ const Register = () => {
         onAccountCreated(userCredentials);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.code);
+        return error.code;
       });
   };
 
@@ -41,19 +49,31 @@ const Register = () => {
       return;
     }
     const { username, dateOfBirth, description = "" } = userData;
+
+    const existingUser = query(
+      collection(store, "users"),
+      where("username", "==", username),
+      limit(1)
+    );
+    const userExists = await getDocs(existingUser);
+    // Checking whether a user already exists with that username
+    if (userExists.docs.length > 0) {
+      return Promise.resolve("User Already Exists");
+    }
+
     return addDoc(collection(store, "users"), {
       uid,
       username,
       dateOfBirth,
       description,
     })
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         dispatch(userLoggedIn({ user: username, userId: uid }));
       })
       .catch((error) => {
         console.log(error);
         submitBtn.current.disabled = false;
+        return "An Error Has Occured";
       });
   };
 

@@ -12,6 +12,7 @@ const RegisterForm = ({ createAccount }) => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -32,9 +33,13 @@ const RegisterForm = ({ createAccount }) => {
       return;
     }
     setCurrentFormState("loading");
-    nextBtn.current.disabled = true;
     createAccount(data)
-      .then(() => {
+      .then((result) => {
+        if (result === "auth/email-already-in-use") {
+          // update error and reset the form
+          updateError("Email Already In Use");
+          reset();
+        }
         setCurrentFormState("idle");
       })
       .catch((error) => {
@@ -52,7 +57,7 @@ const RegisterForm = ({ createAccount }) => {
     updateError(currentError);
   } else if (password !== confirmPassword && !currentError) {
     updateError("Passwords Do Not Match");
-  } else if (!currentError) {
+  } else if (!currentError && customError !== "Email Already In Use") {
     updateError(null);
   }
 
