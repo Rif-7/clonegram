@@ -16,14 +16,19 @@ const UserProfileForm = ({ createUserProfile }) => {
 
   const onSubmit = (data) => {
     setCurrentFormState("loading");
-    createUserProfile(data, createBtn).then((result) => {
-      if (result === "User Already Exists") {
-        setCustomError("Username Taken");
-      } else if (result === "An Error Has Occured") {
-        setCustomError(result);
-      }
-      setCurrentFormState("idle");
-    });
+    createUserProfile(data)
+      .then((result) => {
+        if (result === "User Already Exists") {
+          setCustomError("Username Taken");
+        } else if (result === "An Error Has Occured") {
+          setCustomError(result);
+        }
+        setCurrentFormState("idle");
+      })
+      .catch((error) => {
+        console.log(error);
+        setCurrentFormState("idle");
+      });
   };
 
   const error = errors[Object.keys(errors)[0]]?.message;
@@ -46,8 +51,8 @@ const UserProfileForm = ({ createUserProfile }) => {
               message: "Username Should be Atleast 4 Characters",
             },
             maxLength: {
-              value: "12",
-              message: "Username Should Be Less than 30 Characters",
+              value: "20",
+              message: "Username Should Be Less than 20 Characters",
             },
             pattern: {
               value: /^[a-zA-Z0-9-]+$/,

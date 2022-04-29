@@ -17,6 +17,7 @@ const RegisterForm = ({ createAccount }) => {
   } = useForm();
 
   useEffect(() => {
+    // Automatically click the next button when the component initially loads to recieve errors from react-hook-form
     if (nextBtn.current) {
       nextBtn.current.click();
     }

@@ -18,6 +18,10 @@ const LoginForm = ({ loginUser }) => {
         setCustomError("Invalid Email/Password");
         setCurrentFormState("idle");
         return;
+      } else if (result === "auth/wrong-password") {
+        setCustomError("Wrong Password");
+        setCurrentFormState("idle");
+        return;
       }
       setCustomError(null);
       setCurrentFormState("idle");

@@ -27,12 +27,22 @@ const Login = () => {
         );
         const userDoc = await getDocs(userRef);
         // get the first matching result
-        const userInfo = userDoc.docs[0].data();
+        const userInfo = userDoc.docs[0]?.data();
+        if (!userInfo) {
+          console.log("User info not found");
+          return;
+        }
         dispatch(
-          userLoggedIn({ user: userInfo.username, userId: userInfo.uid })
+          userLoggedIn({
+            user: userInfo.username,
+            userId: userInfo.uid,
+            description: userInfo.description,
+            dateOfBirth: userInfo.dateOfBirth,
+          })
         );
       })
       .catch((error) => {
+        console.log(error);
         return error.code;
       });
   };

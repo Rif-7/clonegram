@@ -37,13 +37,12 @@ const Register = () => {
         onAccountCreated(userCredentials);
       })
       .catch((error) => {
-        console.log(error.code);
+        console.log(error);
         return error.code;
       });
   };
 
-  const createUserProfile = async (userData, submitBtn) => {
-    submitBtn.current.disabled = true;
+  const createUserProfile = async (userData) => {
     if (!uid) {
       console.log("No UID Found");
       return;
@@ -68,11 +67,17 @@ const Register = () => {
       description,
     })
       .then(() => {
-        dispatch(userLoggedIn({ user: username, userId: uid }));
+        dispatch(
+          userLoggedIn({
+            user: username,
+            userId: uid,
+            description,
+            dateOfBirth,
+          })
+        );
       })
       .catch((error) => {
         console.log(error);
-        submitBtn.current.disabled = false;
         return "An Error Has Occured";
       });
   };

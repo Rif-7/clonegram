@@ -58,8 +58,6 @@ input, textarea {
     position: relative;
     overflow: hidden;
     transition: 250ms;
-
-    letter-spacing: 1px;
 }
 
 .submit-btn:hover {

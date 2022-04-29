@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   user: null,
   uid: "",
+  dateOfBirth: "",
+  description: "",
 };
 
 const userSlice = createSlice({
@@ -10,13 +12,19 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     userLoggedIn(state, action) {
-      const { user, userId } = action.payload;
-      state.user = user;
-      state.uid = userId;
+      const { user, userId, description, dateOfBirth } = action.payload;
+      return {
+        user,
+        uid: userId,
+        description,
+        dateOfBirth,
+      };
     },
     userLoggedOut(state) {
       state.user = null;
       state.uid = "";
+      state.description = "";
+      state.dateOfBirth = "";
     },
   },
 });

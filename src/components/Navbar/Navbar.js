@@ -24,7 +24,7 @@ const Navbar = () => {
   const renderedListItems = user ? (
     <>
       <li className="nav-link">
-        <Link to="#">@{user}</Link>
+        <Link to="profile">@{user}</Link>
       </li>
       <li className="nav-link">
         <Link to="#" onClick={logoutUser}>
@@ -38,7 +38,7 @@ const Navbar = () => {
         <Link to="login">Login</Link>
       </li>
       <li className="nav-link">
-        <Link to="register">SignUp</Link>
+        <Link to="register">Register</Link>
       </li>
     </>
   );
