@@ -2,7 +2,7 @@
     --next-btn-width: 150px;
 
     background-color: #AFC1D6;
-    min-height: calc(100vh - 90px);
+    min-height: calc(100vh - var(--navbar-height));
     display: grid;
     grid-template-columns: 1fr minmax(300px, 1fr) 1fr;
     grid-template-rows: 1fr;
@@ -75,6 +75,7 @@ input, textarea {
     color: red;
     font-size: 18px;
     width: 90%;
+    text-align: center;
 }
 
 .success-field {
@@ -100,6 +101,7 @@ p {
     width: 100%;
     box-sizing: border-box;
 
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

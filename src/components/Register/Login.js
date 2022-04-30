@@ -30,7 +30,7 @@ const Login = () => {
         const userInfo = userDoc.docs[0]?.data();
         if (!userInfo) {
           console.log("User info not found");
-          return;
+          return "User info not found";
         }
         dispatch(
           userLoggedIn({

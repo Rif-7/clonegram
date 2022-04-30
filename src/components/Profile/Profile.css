@@ -1,0 +1,78 @@
+.profile-container {
+    min-height: calc(100vh - var(--navbar-height));
+
+    display: grid;
+    grid-template-columns: minmax(200px, 400px) minmax(400px, 1fr);
+}
+
+.profile-card {
+    background-color: #cef9f2;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 200px auto auto auto auto auto;
+    justify-items: center;
+    align-items: center;
+    font-family: "Roboto Mono";
+}
+
+.profile-card p {
+    width: auto;
+    margin: 0px;
+
+    font-size: 18px;
+}
+
+.user-posts {
+    background-color: #afc1d6;
+    grid-column: 2;
+}
+
+.update-btn {
+    width: 80%;
+    height: 50px;
+
+    font-family: "Roboto Mono";
+    font-size: 20px;
+    background-color: #afc1d6;
+    border-radius: 8px;
+    color: whitesmoke;
+    border: 2px solid whitesmoke;
+    position: relative;
+    overflow: hidden;
+    transition: 250ms;
+    margin-bottom: 5px;
+}
+
+.update-btn:hover {
+    box-shadow: inset 0 -50px 0 0 #655A7C;
+}
+
+.follow-data {
+    font-size: 18px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.follow-data > div {
+    font-family: "Roboto Mono";
+    background-color: #655a7c;
+    padding: 6px 8px;
+    border-radius: 8px;
+    color: white;
+    font-size: 20px;
+    border: 2px solid white;
+}
+
+.no-dp, .display-pic-field {
+    border: 3px solid #655a7c;
+    width: 80%;
+    height: 80%;
+    display: grid;
+    place-items: center;
+}
+
+.display-pic-field > input {
+    border: none;
+}
