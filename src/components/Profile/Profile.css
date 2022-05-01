@@ -28,7 +28,7 @@
 }
 
 .update-btn {
-    width: 80%;
+    max-width: 80%;
     height: 50px;
 
     font-family: "Roboto Mono";
@@ -39,7 +39,7 @@
     border: 2px solid whitesmoke;
     position: relative;
     overflow: hidden;
-    transition: 250ms;
+    transition: 300ms;
     margin-bottom: 5px;
 }
 
@@ -76,3 +76,9 @@
 .display-pic-field > input {
     border: none;
 }
+
+.button-div {
+    display: flex;
+    gap: 4px;
+}
+

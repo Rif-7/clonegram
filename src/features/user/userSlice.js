@@ -26,9 +26,15 @@ const userSlice = createSlice({
       state.description = "";
       state.dateOfBirth = "";
     },
+    userUpdated(state, action) {
+      const { username, description, dateOfBirth } = action.payload;
+      state.user = username;
+      state.dateOfBirth = dateOfBirth;
+      state.description = description;
+    },
   },
 });
 
 export default userSlice.reducer;
 
-export const { userLoggedIn, userLoggedOut } = userSlice.actions;
+export const { userLoggedIn, userLoggedOut, userUpdated } = userSlice.actions;
