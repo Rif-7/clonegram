@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import {
@@ -12,35 +12,37 @@ import {
 } from "firebase/firestore";
 import { store } from "../../../App";
 
+import {
+  uploadDisplayPicture,
+  checkIfUsernameTaken,
+  getUserInfo,
+} from "../../../FirebaseFunctions";
 import LoadingFormIndicator from "../../Register/Forms/LoadingFormIndicator";
 import { userUpdated } from "../../../features/user/userSlice";
+import { getDownloadURL } from "firebase/storage";
 
 const ProfileCard = () => {
   const userInfo = useSelector((state) => state.user);
   const [isEditing, setIsEditing] = useState(false);
+  const [displayPicUrl, setDisplayPicUrl] = useState("");
   const dispatch = useDispatch();
 
   const { user, uid, description, dateOfBirth } = userInfo;
 
+  useEffect(() => {
+    getUserProfilePic();
+  });
+
   const toggleCardStatus = () => setIsEditing(!isEditing);
 
-  const checkIfUsernameTaken = async (username) => {
-    const usernameQuery = query(
-      collection(store, "users"),
-      where("username", "==", username),
-      limit(1)
-    );
-
-    const userNameQueryResults = await getDocs(usernameQuery);
-    if (userNameQueryResults.docs[0]) {
-      return true;
-    }
-    return false;
+  const getUserProfilePic = async () => {
+    const result = await getUserInfo(uid);
+    setDisplayPicUrl(result.displayPic);
   };
 
   const updateUserProfile = async (newUserInfo) => {
-    const { username, dateOfBirth, description } = newUserInfo;
-    if (!(username === userInfo.user)) {
+    const { username, dateOfBirth, description, displayPicture } = newUserInfo;
+    if (username !== userInfo.user) {
       const isUsernameTaken = await checkIfUsernameTaken(username);
       if (isUsernameTaken) {
         return "username taken";
@@ -59,12 +61,22 @@ const ProfileCard = () => {
       return;
     }
 
+    let displayPicUrl = "";
+    if (displayPicture[0]) {
+      const dpSnapshot = await uploadDisplayPicture(displayPicture[0], uid);
+      const downloadUrl = await getDownloadURL(dpSnapshot.ref);
+      displayPicUrl = downloadUrl;
+      setDisplayPicUrl(displayPicUrl);
+    }
+
     const userRef = doc(store, "users", userRefId);
     await updateDoc(userRef, {
       username,
       dateOfBirth,
       description,
+      displayPic: displayPicUrl,
     });
+
     dispatch(userUpdated({ username, description, dateOfBirth }));
     toggleCardStatus();
   };
@@ -73,7 +85,7 @@ const ProfileCard = () => {
     username: user,
     description,
     dateOfBirth,
-    displayPic: "",
+    displayPic: displayPicUrl,
   };
 
   if (isEditing) {
@@ -164,7 +176,12 @@ const UpdateProfileForm = ({
     <form className="profile-card" onSubmit={handleSubmit(onSubmit)}>
       <div className="input-field display-pic-field">
         <label htmlFor="display-pic">Display Picture: </label>
-        <input type="file" id="display-pic" accept="image/*"></input>
+        <input
+          type="file"
+          id="display-pic"
+          accept="image/*"
+          {...register("displayPicture")}
+        ></input>
       </div>
       <div className="error-field">{error}</div>
       <div className="input-field">

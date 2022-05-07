@@ -11,6 +11,8 @@ import Login from "./components/Register/Login";
 import Profile from "./components/Profile/Profile";
 
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+
 import { userLoggedOut } from "./features/user/userSlice";
 
 // Your web app's Firebase configuration
@@ -28,6 +30,7 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 const store = getFirestore(app);
+const storage = getStorage(app);
 
 onAuthStateChanged(auth, (user) => {
   if (!user) {
@@ -49,6 +52,6 @@ function App() {
   );
 }
 
-export { auth, store };
+export { auth, store, storage };
 
 export default App;
