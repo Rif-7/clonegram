@@ -7,8 +7,8 @@ import ProfileCard from "./Cards/ProfileCard";
 import "./Profile.css";
 
 const Profile = () => {
-  const user = useSelector((state) => state.user.user);
-  if (!user) {
+  const user = useSelector((state) => state.user);
+  if (!user.user) {
     return <Navigate replace to="/login"></Navigate>;
   }
   return (

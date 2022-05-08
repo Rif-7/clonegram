@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Navigate } from "react-router-dom";
 
 import LoadingFormIndicator from "../../Register/Forms/LoadingFormIndicator";
 
-const NewPostForm = () => {
+const NewPostForm = ({ uploadPost }) => {
   const {
     handleSubmit,
     formState: { errors },
@@ -14,14 +15,24 @@ const NewPostForm = () => {
 
   const [currentFormState, setCurrentFormState] = useState("idle");
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setCurrentFormState("loading");
-    console.log(data);
+    const result = await uploadPost(data);
+    if (result === "error") {
+      setCustomError("An Error Has Occured");
+      setCurrentFormState("idle");
+      return;
+    }
+    setCurrentFormState("redirect");
   };
 
   const error = errors[Object.keys(errors)[0]]?.message;
   if (error && customError) {
     setCustomError(null);
+  }
+
+  if (currentFormState === "redirect") {
+    return <Navigate replace to="/profile"></Navigate>;
   }
 
   return (
