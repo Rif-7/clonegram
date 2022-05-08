@@ -1,6 +1,4 @@
 .login-container {
-    --next-btn-width: 150px;
-
     background-color: #AFC1D6;
     min-height: calc(100vh - var(--navbar-height));
     display: grid;

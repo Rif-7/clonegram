@@ -9,6 +9,8 @@ import Navbar from "./components/Navbar/Navbar";
 import Register from "./components/Register/Register";
 import Login from "./components/Register/Login";
 import Profile from "./components/Profile/Profile";
+import HomePage from "./components/Home/HomePage";
+import NewPost from "./components/NewPost/NewPost";
 
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -43,10 +45,11 @@ function App() {
     <BrowserRouter>
       <Navbar isLoggedIn={false} />
       <Routes>
-        <Route path="/" element={<div>Home</div>}></Route>
+        <Route path="/" element={<HomePage />}></Route>
         <Route path="login" element={<Login />}></Route>
         <Route path="register" element={<Register />}></Route>
         <Route path="profile" element={<Profile />}></Route>
+        <Route path="new-post" element={<NewPost />}></Route>
       </Routes>
     </BrowserRouter>
   );

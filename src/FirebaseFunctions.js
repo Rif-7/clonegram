@@ -32,7 +32,6 @@ const getUserInfo = async (uid) => {
   );
 
   const userDocs = await getDocs(userQuery);
-  console.log(userDocs.docs[0].data());
   return userDocs.docs[0]?.data();
 };
 

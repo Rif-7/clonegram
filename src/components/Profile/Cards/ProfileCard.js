@@ -42,6 +42,8 @@ const ProfileCard = () => {
 
   const updateUserProfile = async (newUserInfo) => {
     const { username, dateOfBirth, description, displayPicture } = newUserInfo;
+
+    // if the user has changed his username, then check if the username is taken by someone else
     if (username !== userInfo.user) {
       const isUsernameTaken = await checkIfUsernameTaken(username);
       if (isUsernameTaken) {
@@ -54,6 +56,7 @@ const ProfileCard = () => {
       where("uid", "==", uid),
       limit(1)
     );
+
     const userDoc = await getDocs(userQuery);
     const userRefId = userDoc.docs[0]?.id;
     if (!userRefId) {
@@ -61,21 +64,25 @@ const ProfileCard = () => {
       return;
     }
 
-    let displayPicUrl = "";
+    const userRef = doc(store, "users", userRefId);
+
     if (displayPicture[0]) {
       const dpSnapshot = await uploadDisplayPicture(displayPicture[0], uid);
       const downloadUrl = await getDownloadURL(dpSnapshot.ref);
-      displayPicUrl = downloadUrl;
+      await updateDoc(userRef, {
+        username,
+        dateOfBirth,
+        description,
+        displayPic: downloadUrl,
+      });
       setDisplayPicUrl(displayPicUrl);
+    } else {
+      await updateDoc(userRef, {
+        username,
+        dateOfBirth,
+        description,
+      });
     }
-
-    const userRef = doc(store, "users", userRefId);
-    await updateDoc(userRef, {
-      username,
-      dateOfBirth,
-      description,
-      displayPic: displayPicUrl,
-    });
 
     dispatch(userUpdated({ username, description, dateOfBirth }));
     toggleCardStatus();

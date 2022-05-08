@@ -1,0 +1,30 @@
+.home {
+    background-color: #AFC1D6;
+    min-height: calc(100vh - var(--navbar-height));
+}
+
+p {
+    margin: 0px;
+}
+
+.new-post-btn {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    width: 75px;
+    height: 75px;
+    border-radius: 100%;
+    background-color: #655A7C;
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    font-family: "Roboto Mono";
+    border: none;
+    border: 2px solid white;
+    transition: 100ms;
+}
+
+.new-post-btn:hover {
+    transform: translateY(-10px);
+    box-shadow: -5px 5px 5px #888;
+}
