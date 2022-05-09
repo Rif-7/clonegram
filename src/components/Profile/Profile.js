@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
+import PostList from "./Cards/PostList";
 import ProfileCard from "./Cards/ProfileCard";
 
 import "./Profile.css";
@@ -14,7 +15,7 @@ const Profile = () => {
   return (
     <div className="profile-container">
       <ProfileCard />
-      <div className="user-posts"></div>
+      <PostList />
     </div>
   );
 };

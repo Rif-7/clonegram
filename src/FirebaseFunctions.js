@@ -24,12 +24,7 @@ const checkIfUsernameTaken = async (username) => {
   );
 
   const usernameQueryResults = await getDocs(usernameQuery);
-
-  // this returns undefined if there is no user
-  if (usernameQueryResults.docs[0]) {
-    return true;
-  }
-  return false;
+  return !!usernameQueryResults.docs[0];
 };
 
 const getUserInfo = async (uid) => {
@@ -69,9 +64,28 @@ const createNewPost = async (uid, data) => {
   }
 };
 
+const getUsersPosts = async (uid) => {
+  try {
+    const postQuery = query(
+      collection(store, "posts"),
+      where("uid", "==", uid),
+      limit(20)
+    );
+    const postsSnap = await getDocs(postQuery);
+
+    return postsSnap.docs.map((post) => {
+      return { ...post.data(), id: post.id };
+    });
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 export {
   uploadDisplayPicture,
   checkIfUsernameTaken,
   getUserInfo,
   createNewPost,
+  getUsersPosts,
 };
