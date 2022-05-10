@@ -7,6 +7,9 @@ import {
   query,
   getDocs,
   addDoc,
+  serverTimestamp,
+  doc,
+  getDoc,
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
@@ -56,6 +59,7 @@ const createNewPost = async (uid, data) => {
       uid,
       postTitle,
       postCaption,
+      timeStamp: serverTimestamp(),
       postImage: postImageUrl,
     });
   } catch (error) {
@@ -82,10 +86,22 @@ const getUsersPosts = async (uid) => {
   }
 };
 
+const getPostInfo = async (postRefId) => {
+  try {
+    const postRef = doc(store, "posts", postRefId);
+    const postSnap = await getDoc(postRef);
+    return postSnap.data();
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 export {
   uploadDisplayPicture,
   checkIfUsernameTaken,
   getUserInfo,
   createNewPost,
   getUsersPosts,
+  getPostInfo,
 };

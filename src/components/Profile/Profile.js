@@ -9,6 +9,7 @@ import "./Profile.css";
 
 const Profile = () => {
   const user = useSelector((state) => state.user);
+
   if (!user.user) {
     return <Navigate replace to="/login"></Navigate>;
   }
