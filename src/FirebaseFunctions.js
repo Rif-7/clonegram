@@ -10,6 +10,7 @@ import {
   serverTimestamp,
   doc,
   getDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
@@ -97,6 +98,19 @@ const getPostInfo = async (postRefId) => {
   }
 };
 
+const updatePost = async (postRefId, updatedTitle, updatedCaption) => {
+  try {
+    const postRef = doc(store, "posts", postRefId);
+    return await updateDoc(postRef, {
+      postTitle: updatedTitle,
+      postCaption: updatedCaption,
+    });
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 export {
   uploadDisplayPicture,
   checkIfUsernameTaken,
@@ -104,4 +118,5 @@ export {
   createNewPost,
   getUsersPosts,
   getPostInfo,
+  updatePost,
 };

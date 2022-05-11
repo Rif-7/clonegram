@@ -122,7 +122,7 @@
 
 
 .post-modal {
-    position: fixed;
+    position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
@@ -166,3 +166,14 @@
     background-color: white;
     padding: 5px;
 }   
+
+.post-container input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 40px;
+}
+
+.post-container textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
