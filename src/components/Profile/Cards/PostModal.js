@@ -18,10 +18,12 @@ const PostModal = ({ id, onCloseClicked }) => {
     if (postSnap === "error") {
       return;
     }
+
     setPostInfo({
       title: postSnap.postTitle,
       imgUrl: postSnap.postImage,
       caption: postSnap.postCaption,
+      timeStamp: postSnap.timeStamp,
     });
   };
 
@@ -75,7 +77,10 @@ const PostModal = ({ id, onCloseClicked }) => {
                 value={updatedTitle}
               ></input>
             ) : (
-              <div className="title">{postInfo.title}</div>
+              <div className="top-field">
+                <div className="title">{postInfo.title}</div>
+                <div className="time-stamp">{postInfo.timeStamp}</div>
+              </div>
             )}
             <img
               className="img-container"

@@ -11,8 +11,17 @@ import {
   doc,
   getDoc,
   updateDoc,
+  orderBy,
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
+
+const convertTimeStamp = (post) => {
+  return (
+    post.timeStamp.toDate().toDateString() +
+    " " +
+    post.timeStamp.toDate().toLocaleTimeString()
+  );
+};
 
 const uploadDisplayPicture = async (picture, uid) => {
   const userStorageRef = ref(storage, uid);
@@ -74,12 +83,14 @@ const getUsersPosts = async (uid) => {
     const postQuery = query(
       collection(store, "posts"),
       where("uid", "==", uid),
-      limit(20)
+      limit(20),
+      orderBy("timeStamp")
     );
     const postsSnap = await getDocs(postQuery);
 
     return postsSnap.docs.map((post) => {
-      return { ...post.data(), id: post.id };
+      const timeStamp = convertTimeStamp(post.data());
+      return { ...post.data(), id: post.id, timeStamp };
     });
   } catch (error) {
     console.log(error);
@@ -91,7 +102,8 @@ const getPostInfo = async (postRefId) => {
   try {
     const postRef = doc(store, "posts", postRefId);
     const postSnap = await getDoc(postRef);
-    return postSnap.data();
+    const timeStamp = convertTimeStamp(postSnap.data());
+    return { ...postSnap.data(), timeStamp };
   } catch (error) {
     console.log(error);
     return "error";
@@ -111,6 +123,24 @@ const updatePost = async (postRefId, updatedTitle, updatedCaption) => {
   }
 };
 
+const getLatestPosts = async () => {
+  try {
+    const postQuery = query(
+      collection(store, "posts"),
+      orderBy("timeStamp"),
+      limit(15)
+    );
+    const postsSnap = await getDocs(postQuery);
+    return postsSnap.docs.map((post) => {
+      const timeStamp = convertTimeStamp(post.data());
+      return { ...post.data(), id: post.id, timeStamp };
+    });
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 export {
   uploadDisplayPicture,
   checkIfUsernameTaken,
@@ -119,4 +149,5 @@ export {
   getUsersPosts,
   getPostInfo,
   updatePost,
+  getLatestPosts,
 };

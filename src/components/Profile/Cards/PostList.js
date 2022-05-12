@@ -9,6 +9,7 @@ const PostList = () => {
   const [viewPost, setViewPost] = useState(null);
 
   const [posts, setPosts] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
   const userId = useSelector((state) => state.user.uid);
   useEffect(() => {
     getPosts();
@@ -17,9 +18,11 @@ const PostList = () => {
   const getPosts = async () => {
     const userPostSnap = await getUsersPosts(userId);
     if (userPostSnap === "error") {
+      setIsLoaded(true);
       return;
     }
-    setPosts(userPostSnap);
+    setPosts(userPostSnap.reverse());
+    setIsLoaded(true);
   };
 
   // onPostClicked takes an id returns a function
@@ -43,7 +46,7 @@ const PostList = () => {
 
   return (
     <div className="post-list">
-      {posts.length === 0 ? <LoadingFormIndicator /> : renderedPosts}
+      {!isLoaded ? <LoadingFormIndicator /> : renderedPosts}
       {viewPost ? (
         <PostModal id={viewPost} onCloseClicked={onCloseClicked} />
       ) : null}

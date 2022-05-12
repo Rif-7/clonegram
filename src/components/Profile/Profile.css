@@ -155,7 +155,20 @@
     color: white;
 }
 
-.post-modal .title {
+.top-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-modal .time-stamp {
+    font-family: "Open Sans", sans-serif;
+    font-size: 18px;
+    font-style: italic;
+    margin-right: 5px;
+}
+
+.post-modal .top-field {
     font-size: 24px;
     background-color: white;
     padding: 5px;
