@@ -11,6 +11,7 @@ import Login from "./components/Register/Login";
 import Profile from "./components/Profile/Profile";
 import HomePage from "./components/Home/HomePage";
 import NewPost from "./components/NewPost/NewPost";
+import UserPage from "./components/UserPage/UserPage";
 
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -50,6 +51,7 @@ function App() {
         <Route path="register" element={<Register />}></Route>
         <Route path="profile" element={<Profile />}></Route>
         <Route path="new-post" element={<NewPost />}></Route>
+        <Route path="user/:userId" element={<UserPage />}></Route>
       </Routes>
     </BrowserRouter>
   );

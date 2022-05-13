@@ -41,14 +41,19 @@ const checkIfUsernameTaken = async (username) => {
 };
 
 const getUserInfo = async (uid) => {
-  const userQuery = query(
-    collection(store, "users"),
-    where("uid", "==", uid),
-    limit(1)
-  );
+  try {
+    const userQuery = query(
+      collection(store, "users"),
+      where("uid", "==", uid),
+      limit(1)
+    );
 
-  const userDocs = await getDocs(userQuery);
-  return userDocs.docs[0]?.data();
+    const userDocs = await getDocs(userQuery);
+    return userDocs.docs[0]?.data();
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
 };
 
 const createNewPost = async (uid, data) => {
@@ -141,6 +146,22 @@ const getLatestPosts = async () => {
   }
 };
 
+const followUser = async (signedUsersId, followingUsersId) => {
+  if (signedUsersId === followingUsersId || !signedUsersId) {
+    return "error";
+  }
+  try {
+    const followRef = doc(store, "users", signedUsersId, "followers");
+    return await addDoc(followRef, {
+      uid: followingUsersId,
+      timeStamp: serverTimestamp(),
+    });
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 export {
   uploadDisplayPicture,
   checkIfUsernameTaken,
@@ -150,4 +171,5 @@ export {
   getPostInfo,
   updatePost,
   getLatestPosts,
+  followUser,
 };

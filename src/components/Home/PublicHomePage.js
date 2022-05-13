@@ -23,12 +23,13 @@ const PublicHomePage = () => {
       {posts.length === 0 ? (
         <LoadingFormIndicator />
       ) : (
-        posts.map((post) => (
+        posts.map((post, index) => (
           <PostContainer
             title={post.postTitle}
             caption={post.postCaption}
             imgUrl={post.postImage}
             timeStamp={post.timeStamp}
+            key={index}
           />
         ))
       )}
