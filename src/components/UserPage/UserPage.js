@@ -14,7 +14,7 @@ import PostCard from "../Profile/Cards/PostCard";
 import "./UserPage.css";
 
 const UserPage = () => {
-  const signedUsersId = useSelector((state) => state.user.uid);
+  const signedUser = useSelector((state) => state.user);
   const { userId } = useParams();
   const [userInfo, setUserInfo] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -35,11 +35,11 @@ const UserPage = () => {
   };
 
   const handleFollowingInfo = async (userInfo) => {
-    if (!signedUsersId) {
+    if (!signedUser.uid) {
       return;
     }
     const followingInfo = await checkIfUserIsFollowing(
-      signedUsersId,
+      signedUser.uid,
       userInfo.refId
     );
     if (followingInfo) {
@@ -58,11 +58,15 @@ const UserPage = () => {
   };
 
   const onFollowClicked = async (e) => {
-    if (!signedUsersId) {
+    if (!signedUser.uid) {
       return;
     }
     e.target.classList.add("loading-btn");
-    const result = await followUser(signedUsersId, userInfo.refId);
+    const result = await followUser(
+      signedUser.uid,
+      signedUser.user,
+      userInfo.refId
+    );
     if (result === "error") {
       e.target.classList.remove("loading-btn");
       return;
@@ -72,11 +76,11 @@ const UserPage = () => {
   };
 
   const onUnfollowClicked = async (e) => {
-    if (!signedUsersId) {
+    if (!signedUser.uid) {
       return;
     }
     e.target.classList.add("loading-btn");
-    const result = await unfollowUser(signedUsersId, userInfo.refId);
+    const result = await unfollowUser(signedUser.uid, userInfo.refId);
     if (result === "error") {
       e.target.classList.remove("loading-btn");
       return;
@@ -94,7 +98,7 @@ const UserPage = () => {
     });
   }
 
-  if (signedUsersId === userId) {
+  if (signedUser.uid === userId) {
     return <Navigate replace to="/profile" />;
   }
 

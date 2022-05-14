@@ -148,7 +148,15 @@ const getLatestPosts = async () => {
   }
 };
 
-const followUser = async (signedUsersId, followingUsersId) => {
+const addUserToFollowersList = async (signedUsersId, followingUsersId) => {
+  try {
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
+const followUser = async (signedUsersId, signedUsername, followingUsersId) => {
   if (signedUsersId === followingUsersId || !signedUsersId) {
     return "error";
   }
@@ -161,6 +169,7 @@ const followUser = async (signedUsersId, followingUsersId) => {
       signedUsersId
     );
     return await setDoc(followRef, {
+      username: signedUsername,
       timeStamp: serverTimestamp(),
     });
   } catch (error) {
@@ -202,6 +211,17 @@ const checkIfUserIsFollowing = async (signedUsersId, followingUsersId) => {
   }
 };
 
+const getFollowersList = async (userId) => {
+  try {
+    const followersRef = collection(store, "users", userId, "followers");
+    const followersSnap = await getDocs(followersRef);
+    return followersSnap.docs;
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 export {
   uploadDisplayPicture,
   checkIfUsernameTaken,
@@ -214,4 +234,6 @@ export {
   followUser,
   checkIfUserIsFollowing,
   unfollowUser,
+  getFollowersList,
+  addUserToFollowersList,
 };
