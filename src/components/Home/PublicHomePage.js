@@ -29,6 +29,7 @@ const PublicHomePage = () => {
             caption={post.postCaption}
             imgUrl={post.postImage}
             timeStamp={post.timeStamp}
+            userId={post.uid}
             key={index}
           />
         ))
