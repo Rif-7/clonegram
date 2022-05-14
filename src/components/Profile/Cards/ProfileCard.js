@@ -122,9 +122,6 @@ const ProfileView = ({
   dateOfBirth,
   onUpdateClicked,
 }) => {
-  let convertedDate = new Date(dateOfBirth);
-  convertedDate = convertedDate.toDateString();
-
   return (
     <>
       {displayPic ? (
@@ -132,16 +129,16 @@ const ProfileView = ({
       ) : (
         <div className="no-dp">No Display Picture Uploaded</div>
       )}
-      <div className="follow-data">
+      <div className="text-info">
+        <p className="username">{username}</p>
+        <p className="date-of-birth">{dateOfBirth}</p>
+        <p className="description">{description}</p>
         <div className="followers">Followers: 23</div>
         <div className="following">Following: 30</div>
+        <button className="update-btn" onClick={onUpdateClicked}>
+          Edit Profile
+        </button>
       </div>
-      <p className="username">{username}</p>
-      <p className="description">{description}</p>
-      <p className="date-of-birth">{convertedDate}</p>
-      <button className="update-btn" onClick={onUpdateClicked}>
-        Edit Profile
-      </button>
     </>
   );
 };
@@ -180,7 +177,7 @@ const UpdateProfileForm = ({
   const error = errors[Object.keys(errors)[0]]?.message || customError;
 
   return (
-    <form className="profile-card" onSubmit={handleSubmit(onSubmit)}>
+    <form className="form-card-profile" onSubmit={handleSubmit(onSubmit)}>
       <div className="input-field display-pic-field">
         <label htmlFor="display-pic">Display Picture: </label>
         <input
@@ -190,45 +187,52 @@ const UpdateProfileForm = ({
           {...register("displayPicture")}
         ></input>
       </div>
-      <div className="error-field">{error}</div>
-      <div className="input-field">
-        <label htmlFor="username">Username: </label>
-        <input
-          type="text"
-          id="username"
-          {...register("username", {
-            required: "Username Is Required",
-            minLength: {
-              value: "4",
-              message: "Username Should be Atleast 4 Characters",
-            },
-            maxLength: {
-              value: "20",
-              message: "Username Should Be Less than 20 Characters",
-            },
-            pattern: {
-              value: /^[a-zA-Z0-9-]+$/,
-              message:
-                "Username Should Only Contain Letters, Numbers and '-' Symbol",
-            },
-          })}
-        ></input>
+
+      <div className="text-fields">
+        <div className="custom-error-field">{error}</div>
+        <div className="input-field">
+          <label htmlFor="username">Username: </label>
+          <input
+            type="text"
+            id="username"
+            {...register("username", {
+              required: "Username Is Required",
+              minLength: {
+                value: "4",
+                message: "Username Should be Atleast 4 Characters",
+              },
+              maxLength: {
+                value: "20",
+                message: "Username Should Be Less than 20 Characters",
+              },
+              pattern: {
+                value: /^[a-zA-Z0-9-]+$/,
+                message:
+                  "Username Should Only Contain Letters, Numbers and '-' Symbol",
+              },
+            })}
+          ></input>
+        </div>
+
+        <div className="input-field">
+          <label htmlFor="date-of-birth">Date Of Birth: </label>
+          <input
+            type="date"
+            id="date-of-birth"
+            {...register("dateOfBirth", {
+              required: "Date Of Birth Is Required",
+            })}
+          ></input>
+        </div>
       </div>
 
-      <div className="input-field">
-        <label htmlFor="date-of-birth">Date Of Birth: </label>
-        <input
-          type="date"
-          {...register("dateOfBirth", {
-            required: "Date Of Birth Is Required",
-          })}
-        ></input>
+      <div className="text-field">
+        <div className="input-field">
+          <label htmlFor="description">Description:</label>
+          <textarea id="description" {...register("description")}></textarea>
+        </div>
       </div>
 
-      <div className="input-field">
-        <label htmlFor="description">Description:</label>
-        <textarea id="description" {...register("description")}></textarea>
-      </div>
       {formStatus === "idle" ? (
         <div className="button-div">
           <button className="update-btn">Update Profile</button>

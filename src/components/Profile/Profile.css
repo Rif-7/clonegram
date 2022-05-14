@@ -2,22 +2,81 @@
     min-height: calc(100vh - var(--navbar-height));
 
     display: grid;
-    grid-template-columns: minmax(200px, 400px) minmax(400px, 1fr);
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
 }
 
 .profile-card {
     background-color: #cef9f2;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 200px auto auto auto auto auto;
-    justify-items: center;
-    align-items: center;
+    height: 250px;
+    padding: 5px;
     font-family: "Roboto Mono";
+
+    display: flex;
+    gap: 12px;
+    align-items: center;
 }
 
-.profile-card > .date-of-birth {
-    font-family: "Open Sans", sans-serif;
-    font-style: italic;
+.profile-card .username {
+    font-size: 24px !important;
+    font-weight: 700;
+}
+
+.form-card-profile {
+    background-color: #cef9f2;
+    height: 250px;
+    font-family: "Roboto Mono";
+
+    display: grid;
+    grid-template-columns: 250px auto auto auto;
+    grid-auto-rows: 1fr;
+}
+
+.form-card-profile > *:nth-child(2n) {
+    background-color: #afc1d6;
+}
+
+.form-card-profile #display-pic {
+    width: 100%;
+    height: 100%;
+    border-radius: 0px;
+}
+
+.form-card-profile .input-field {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+}
+
+.form-card-profile .text-fields {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-card-profile .custom-error-field {
+    color: red;
+}
+
+.form-card-profile > * {
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.profile-card > .text-info {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    flex: 1 1 auto;
+}
+
+.profile-card > .text-info > * {
+    border-bottom: 1px solid black;
+    margin-bottom: 3px;
+    font-size: 19px;
 }
 
 .profile-card p {
@@ -33,47 +92,26 @@
 }
 
 .update-btn {
-    max-width: 80%;
-    height: 50px;
-
+    width: fit-content;
     font-family: "Roboto Mono";
     font-size: 20px;
-    background-color: #ab92bf;
-    border-radius: 8px;
+    background-color: #AB92BF;
+    border-radius: 4px;
+    border: 3px solid white !important;
     color: whitesmoke;
-    border: 2px solid whitesmoke;
     position: relative;
-    overflow: hidden;
     transition: 300ms;
-    margin-bottom: 5px;
 }
 
 .update-btn:hover {
-    box-shadow: inset 0 -50px 0 0 #655A7C;
+    transform: translateX(5px);
 }
 
-.follow-data {
-    font-size: 18px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
 
-.follow-data > div {
-    font-family: "Roboto Mono";
-    background-color: #ab92bf;
-    padding: 6px 8px;
-    border-radius: 8px;
-    color: white;
-    font-size: 20px;
-    border: 2px solid white;
-}
-
-.no-dp, .display-pic-field {
+.no-dp {
     border: 3px solid #655a7c;
-    width: 80%;
-    height: 80%;
+    border-radius: 50%;
+    height: 100%;
     display: grid;
     place-items: center;
 }
@@ -82,13 +120,18 @@
     border: none;
 }
 
+
 .button-div {
     display: flex;
+    flex-direction: column;
     gap: 4px;
 }
 
 .display-pic {
-    height: 95%;
+    height: 100%;
+    width: 250px;
+    border-radius: 50%;
+    border: 3px solid #ab92bf;
 }
 
 .post-list {

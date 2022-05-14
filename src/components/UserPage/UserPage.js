@@ -48,7 +48,7 @@ const UserPage = () => {
             <img src={userInfo.displayPic} alt="profile"></img>
             <div className="text-info">
               <div className="username">
-                {userInfo.username}{" "}
+                {userInfo.username}
                 <button className="follow-btn">Follow</button>
               </div>
               <div className="date-of-birth">{userInfo.dateOfBirth}</div>
