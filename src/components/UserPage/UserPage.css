@@ -67,3 +67,8 @@
 .followers {
     margin-top: auto;
 }
+
+.loading-btn {
+    background-color: #d6ca98 !important;
+    pointer-events: none;
+}

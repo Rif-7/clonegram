@@ -12,6 +12,8 @@ import {
   getDoc,
   updateDoc,
   orderBy,
+  setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
@@ -49,7 +51,7 @@ const getUserInfo = async (uid) => {
     );
 
     const userDocs = await getDocs(userQuery);
-    return userDocs.docs[0]?.data();
+    return { ...userDocs.docs[0].data(), refId: userDocs.docs[0].id };
   } catch (error) {
     console.log(error);
     return "error";
@@ -151,11 +153,49 @@ const followUser = async (signedUsersId, followingUsersId) => {
     return "error";
   }
   try {
-    const followRef = doc(store, "users", signedUsersId, "followers");
-    return await addDoc(followRef, {
-      uid: followingUsersId,
+    const followRef = doc(
+      store,
+      "users",
+      followingUsersId,
+      "followers",
+      signedUsersId
+    );
+    return await setDoc(followRef, {
       timeStamp: serverTimestamp(),
     });
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
+const unfollowUser = async (signedUsersId, followingUsersId) => {
+  try {
+    const followRef = doc(
+      store,
+      "users",
+      followingUsersId,
+      "followers",
+      signedUsersId
+    );
+    await deleteDoc(followRef);
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
+const checkIfUserIsFollowing = async (signedUsersId, followingUsersId) => {
+  try {
+    const followRef = doc(
+      store,
+      "users",
+      followingUsersId,
+      "followers",
+      signedUsersId
+    );
+    const docSnap = await getDoc(followRef);
+    return docSnap.exists();
   } catch (error) {
     console.log(error);
     return "error";
@@ -172,4 +212,6 @@ export {
   updatePost,
   getLatestPosts,
   followUser,
+  checkIfUserIsFollowing,
+  unfollowUser,
 };
