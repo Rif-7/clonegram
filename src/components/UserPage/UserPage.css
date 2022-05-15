@@ -1,7 +1,7 @@
 .user-page {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto 1fr;
     background-color: #AB92BF;
     min-height: calc(100vh - var(--navbar-height));
 }
@@ -55,9 +55,14 @@
     color: white;
     font-size: 17px;
     font-family: inherit;
-    border: 2px solid white;
+    border: 2px solid white !important;
     border-radius: 4px;
     transition: 250ms;
+}
+
+.view-follow-btn {
+    width: fit-content !important;
+    padding: 1px 3px;
 }
 
 .follow-btn:hover {
@@ -71,4 +76,47 @@
 .loading-btn {
     background-color: #d6ca98 !important;
     pointer-events: none;
+}
+
+.followers-container {
+    display: flex;
+    justify-content: center;
+
+    font-family: "Roboto Mono", monospace;
+    padding: 10px;
+}
+
+.followers-container > div {
+    flex: 1 1 auto;
+    display: flex;
+    max-width: 500px;
+    flex-direction: column;
+    gap: 4px;
+
+    padding: 5px;
+    border: 2px solid white;
+}
+
+.follow-header {
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+}
+
+.follow-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.follow-user {
+    font-family: "Roboto Mono", monospace;
+    text-decoration: none;
+    font-size: 18px;
+    color: black;
+    background-color: #CEC9F2;
+    padding: 2px;
+
+    display: flex;
+    justify-content: space-between;
 }

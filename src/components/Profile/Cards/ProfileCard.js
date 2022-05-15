@@ -22,7 +22,7 @@ import LoadingFormIndicator from "../../Register/Forms/LoadingFormIndicator";
 import { userUpdated } from "../../../features/user/userSlice";
 import { getDownloadURL } from "firebase/storage";
 
-const ProfileCard = () => {
+const ProfileCard = ({ toggleFollowerView }) => {
   const userInfo = useSelector((state) => state.user);
   const [isEditing, setIsEditing] = useState(false);
   const [displayPicUrl, setDisplayPicUrl] = useState("");
@@ -115,6 +115,7 @@ const ProfileCard = () => {
         {...childComponentProps}
         onUpdateClicked={toggleCardStatus}
         followInfo={followInfo}
+        toggleFollowerView={toggleFollowerView}
       />
     </div>
   );
@@ -127,6 +128,7 @@ const ProfileView = ({
   dateOfBirth,
   onUpdateClicked,
   followInfo,
+  toggleFollowerView,
 }) => {
   return (
     <>
@@ -136,7 +138,12 @@ const ProfileView = ({
         <div className="no-dp">No Display Picture Uploaded</div>
       )}
       <div className="text-info">
-        <p className="username">{username}</p>
+        <p className="username">
+          {username}{" "}
+          <button className="update-btn" onClick={onUpdateClicked}>
+            Edit Profile
+          </button>
+        </p>
         <p className="date-of-birth">{dateOfBirth}</p>
         <p className="description">{description}</p>
         <div className="followers">
@@ -145,8 +152,8 @@ const ProfileView = ({
         <div className="following">
           Following: {followInfo.following?.length || 0}
         </div>
-        <button className="update-btn" onClick={onUpdateClicked}>
-          Edit Profile
+        <button className="update-btn" onClick={toggleFollowerView}>
+          View List
         </button>
       </div>
     </>
