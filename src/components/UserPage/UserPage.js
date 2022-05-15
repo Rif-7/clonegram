@@ -11,9 +11,10 @@ import {
 import { useSelector } from "react-redux";
 
 import PostCard from "../Profile/Cards/PostCard";
+import FollowersList from "./FollowersList";
+import PostModal from "../Profile/Cards/PostModal";
 
 import "./UserPage.css";
-import FollowersList from "./FollowersList";
 
 const UserPage = () => {
   const signedUser = useSelector((state) => state.user);
@@ -23,6 +24,7 @@ const UserPage = () => {
   const [isFollowing, setIsFollowing] = useState(null);
   const [followInfo, setFollowInfo] = useState({});
   const [showFollowers, setShowFollowers] = useState(false);
+  const [viewPost, setViewPost] = useState(null);
 
   useEffect(() => {
     if (userInfo) {
@@ -125,11 +127,20 @@ const UserPage = () => {
     }
   };
 
+  // this function returns a function that when ran sets the viewPost state to the id
+  const onPostClicked = (id) => () => setViewPost(id);
+  const onCloseClicked = () => setViewPost(null);
+
   let renderedPosts = null;
   if (posts.length !== 0) {
     renderedPosts = posts.map((post, index) => {
       return (
-        <PostCard title={post.postTitle} imgUrl={post.postImage} key={index} />
+        <PostCard
+          title={post.postTitle}
+          imgUrl={post.postImage}
+          key={index}
+          onClicked={onPostClicked(post.id)}
+        />
       );
     });
   }
@@ -148,7 +159,6 @@ const UserPage = () => {
             ) : (
               <div></div>
             )}
-
             <div className="text-info">
               <div className="username">
                 {userInfo.username}
@@ -185,6 +195,16 @@ const UserPage = () => {
         <FollowersList
           followers={followInfo.followers}
           following={followInfo.following}
+        />
+      ) : (
+        <div></div>
+      )}
+
+      {viewPost ? (
+        <PostModal
+          id={viewPost}
+          onCloseClicked={onCloseClicked}
+          isAuthor={false}
         />
       ) : (
         <div></div>

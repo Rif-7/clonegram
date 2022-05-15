@@ -48,7 +48,11 @@ const PostList = () => {
     <div className="post-list">
       {!isLoaded ? <LoadingFormIndicator /> : renderedPosts}
       {viewPost ? (
-        <PostModal id={viewPost} onCloseClicked={onCloseClicked} />
+        <PostModal
+          id={viewPost}
+          onCloseClicked={onCloseClicked}
+          isAuthor={true}
+        />
       ) : null}
     </div>
   );

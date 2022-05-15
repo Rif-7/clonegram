@@ -2,7 +2,7 @@ import React, { useEffect, useState, useLayoutEffect } from "react";
 import { getPostInfo, updatePost } from "../../../FirebaseFunctions";
 import LoadingFormIndicator from "../../Register/Forms/LoadingFormIndicator";
 
-const PostModal = ({ id, onCloseClicked }) => {
+const PostModal = ({ id, onCloseClicked, isAuthor }) => {
   const [postInfo, setPostInfo] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTitle, setUpdatedTitle] = useState(null);
@@ -97,13 +97,14 @@ const PostModal = ({ id, onCloseClicked }) => {
             ) : (
               <div className="caption">{postInfo.caption}</div>
             )}
-            {isUpdating ? (
-              <LoadingFormIndicator />
-            ) : (
-              <button className="submit-btn" onClick={handleEditMode}>
-                Update
-              </button>
-            )}
+            {isAuthor &&
+              (isUpdating ? (
+                <LoadingFormIndicator />
+              ) : (
+                <button className="submit-btn" onClick={handleEditMode}>
+                  Update
+                </button>
+              ))}
           </>
         )}
       </div>
@@ -114,6 +115,7 @@ const PostModal = ({ id, onCloseClicked }) => {
 const useLockBodyScroll = () => {
   useLayoutEffect(() => {
     // Get original body overflow
+    window.scrollTo(0, 0);
     const originalStyle = window.getComputedStyle(document.body).overflow;
     // Prevent scrolling on mount
     document.body.style.overflow = "hidden";
