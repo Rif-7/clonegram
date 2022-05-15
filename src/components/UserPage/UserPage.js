@@ -6,6 +6,7 @@ import {
   getUserInfo,
   getUsersPosts,
   unfollowUser,
+  getFollowInfo,
 } from "../../FirebaseFunctions";
 import { useSelector } from "react-redux";
 
@@ -19,6 +20,7 @@ const UserPage = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [posts, setPosts] = useState([]);
   const [isFollowing, setIsFollowing] = useState(null);
+  const [followInfo, setFollowInfo] = useState({});
 
   useEffect(() => {
     handleUserInfo();
@@ -38,15 +40,17 @@ const UserPage = () => {
     if (!signedUser.uid) {
       return;
     }
-    const followingInfo = await checkIfUserIsFollowing(
+    const isUserFollowing = await checkIfUserIsFollowing(
       signedUser.uid,
       userInfo.refId
     );
-    if (followingInfo) {
+    if (isUserFollowing) {
       setIsFollowing("following");
     } else {
       setIsFollowing(false);
     }
+    const followData = await getFollowInfo(userId);
+    setFollowInfo(followData);
   };
 
   const handleUserPosts = async () => {
@@ -123,8 +127,12 @@ const UserPage = () => {
               </div>
               <div className="date-of-birth">{userInfo.dateOfBirth}</div>
               <div className="description">{userInfo.description}</div>
-              <div className="followers">Followers: 6</div>
-              <div className="following">Following: 8</div>
+              <div className="followers">
+                Followers: {followInfo.followers?.length || 0}
+              </div>
+              <div className="following">
+                Following: {followInfo.following?.length || 0}
+              </div>
             </div>
           </>
         )}

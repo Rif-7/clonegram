@@ -243,11 +243,17 @@ const checkIfUserIsFollowing = async (signedUsersId, followingUsersId) => {
   }
 };
 
-const getFollowersList = async (userId) => {
+const getFollowInfo = async (userId) => {
   try {
-    const followersRef = collection(store, "users", userId, "followers");
+    const userSnap = await getUserInfo(userId);
+    const { refId } = userSnap;
+
+    const followersRef = collection(store, "users", refId, "followers");
     const followersSnap = await getDocs(followersRef);
-    return followersSnap.docs;
+
+    const followingRef = collection(store, "users", refId, "following");
+    const followingSnap = await getDocs(followingRef);
+    return { followers: followersSnap.docs, following: followingSnap.docs };
   } catch (error) {
     console.log(error);
     return "error";
@@ -266,6 +272,6 @@ export {
   followUser,
   checkIfUserIsFollowing,
   unfollowUser,
-  getFollowersList,
+  getFollowInfo,
   addUserToFollowersList,
 };

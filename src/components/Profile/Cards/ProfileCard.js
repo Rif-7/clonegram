@@ -16,6 +16,7 @@ import {
   uploadDisplayPicture,
   checkIfUsernameTaken,
   getUserInfo,
+  getFollowInfo,
 } from "../../../FirebaseFunctions";
 import LoadingFormIndicator from "../../Register/Forms/LoadingFormIndicator";
 import { userUpdated } from "../../../features/user/userSlice";
@@ -25,19 +26,22 @@ const ProfileCard = () => {
   const userInfo = useSelector((state) => state.user);
   const [isEditing, setIsEditing] = useState(false);
   const [displayPicUrl, setDisplayPicUrl] = useState("");
+  const [followInfo, setFollowInfo] = useState({});
   const dispatch = useDispatch();
 
   const { user, uid, description, dateOfBirth } = userInfo;
 
   useEffect(() => {
-    getUserProfilePic();
+    handleUserInfo();
   });
 
   const toggleCardStatus = () => setIsEditing(!isEditing);
 
-  const getUserProfilePic = async () => {
-    const result = await getUserInfo(uid);
-    setDisplayPicUrl(result.displayPic);
+  const handleUserInfo = async () => {
+    const userData = await getUserInfo(uid);
+    const followData = await getFollowInfo(userData.uid);
+    setDisplayPicUrl(userData.displayPic);
+    setFollowInfo(followData);
   };
 
   const updateUserProfile = async (newUserInfo) => {
@@ -110,6 +114,7 @@ const ProfileCard = () => {
       <ProfileView
         {...childComponentProps}
         onUpdateClicked={toggleCardStatus}
+        followInfo={followInfo}
       />
     </div>
   );
@@ -121,6 +126,7 @@ const ProfileView = ({
   description,
   dateOfBirth,
   onUpdateClicked,
+  followInfo,
 }) => {
   return (
     <>
@@ -133,8 +139,12 @@ const ProfileView = ({
         <p className="username">{username}</p>
         <p className="date-of-birth">{dateOfBirth}</p>
         <p className="description">{description}</p>
-        <div className="followers">Followers: 23</div>
-        <div className="following">Following: 30</div>
+        <div className="followers">
+          Followers: {followInfo.followers?.length || 0}
+        </div>
+        <div className="following">
+          Following: {followInfo.following?.length || 0}
+        </div>
         <button className="update-btn" onClick={onUpdateClicked}>
           Edit Profile
         </button>
