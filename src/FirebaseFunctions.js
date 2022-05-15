@@ -150,6 +150,36 @@ const getLatestPosts = async () => {
 
 const addUserToFollowersList = async (signedUsersId, followingUsersId) => {
   try {
+    const userSnap = await getUserInfo(signedUsersId);
+    const followingUserSnap = await getDoc(
+      doc(store, "users", followingUsersId)
+    );
+    const { username, uid } = followingUserSnap.data();
+    const followingRef = doc(store, "users", userSnap.refId, "following", uid);
+    return await setDoc(followingRef, {
+      username: username,
+      timeStamp: serverTimestamp(),
+    });
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
+const removeUserFromFollowersList = async (signedUsersId, followingUsersId) => {
+  try {
+    const userSnap = await getUserInfo(signedUsersId);
+    const followingUserSnap = await getDoc(
+      doc(store, "users", followingUsersId)
+    );
+    const followingRef = doc(
+      store,
+      "users",
+      userSnap.refId,
+      "following",
+      followingUserSnap.data().uid
+    );
+    return await deleteDoc(followingRef);
   } catch (error) {
     console.log(error);
     return "error";
@@ -168,6 +198,7 @@ const followUser = async (signedUsersId, signedUsername, followingUsersId) => {
       "followers",
       signedUsersId
     );
+    await addUserToFollowersList(signedUsersId, followingUsersId);
     return await setDoc(followRef, {
       username: signedUsername,
       timeStamp: serverTimestamp(),
@@ -187,7 +218,8 @@ const unfollowUser = async (signedUsersId, followingUsersId) => {
       "followers",
       signedUsersId
     );
-    await deleteDoc(followRef);
+    await removeUserFromFollowersList(signedUsersId, followingUsersId);
+    return await deleteDoc(followRef);
   } catch (error) {
     console.log(error);
     return "error";
