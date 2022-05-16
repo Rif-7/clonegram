@@ -1,5 +1,6 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage, store } from "./App";
+import { store as reduxStore } from "./app/store";
 import {
   collection,
   where,
@@ -25,10 +26,17 @@ const convertTimeStamp = (post) => {
   );
 };
 
+const getSignedInUser = () => reduxStore.getState().user;
+
 const uploadDisplayPicture = async (picture, uid) => {
-  const userStorageRef = ref(storage, uid);
-  const displayPicRef = ref(userStorageRef, "displayPic");
-  return await uploadBytes(displayPicRef, picture);
+  try {
+    const userStorageRef = ref(storage, uid);
+    const displayPicRef = ref(userStorageRef, "displayPic");
+    return await uploadBytes(displayPicRef, picture);
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
 };
 
 const checkIfUsernameTaken = async (username) => {
@@ -260,6 +268,54 @@ const getFollowInfo = async (userId) => {
   }
 };
 
+const likePost = async (postId) => {
+  const signedUser = getSignedInUser();
+  if (!signedUser?.uid) {
+    return "error";
+  }
+
+  try {
+    const likesRef = doc(store, "posts", postId, "likes", signedUser.uid);
+    return await setDoc(likesRef, {
+      timeStamp: serverTimestamp(),
+    });
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
+const unLikePost = async (postId) => {
+  const signedUser = getSignedInUser();
+  if (!signedUser?.uid) {
+    return "error";
+  }
+
+  try {
+    const likesRef = doc(store, "posts", postId, "likes", signedUser.uid);
+    return await deleteDoc(likesRef);
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
+const checkIfUserLikedPost = async (postId) => {
+  const signedUser = getSignedInUser();
+  if (!signedUser?.uid) {
+    return "error";
+  }
+
+  try {
+    const likesRef = doc(store, "posts", postId, "likes", signedUser.uid);
+    const likeDoc = await getDoc(likesRef);
+    return likeDoc.exists();
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 export {
   uploadDisplayPicture,
   checkIfUsernameTaken,
@@ -274,4 +330,7 @@ export {
   unfollowUser,
   getFollowInfo,
   addUserToFollowersList,
+  likePost,
+  unLikePost,
+  checkIfUserLikedPost,
 };

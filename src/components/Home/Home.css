@@ -47,7 +47,6 @@ p {
     color: white;
     font-family: "Roboto Mono", monospace;
     width: 700px;
-    
     border-radius: 4px;
 }
 
@@ -74,6 +73,22 @@ p {
     font-size: 18px;
     font-family: "Open Sans", sans-serif;
     font-style: italic;
+}
+
+.post-view .like-btn {
+    width: fit-content;
+    padding: 2px 4px;
+    font-family: "Roboto Mono", monospace;
+    border-radius: 4px;
+    font-size: 18px;
+    margin: 5px;
+
+    border: 2px solid white;
+}
+
+.post-view .liked-btn {
+    background-color: red;
+    color: white;
 }
 
 .post-user {
