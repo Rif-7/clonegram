@@ -316,6 +316,17 @@ const checkIfUserLikedPost = async (postId) => {
   }
 };
 
+const getLikeCount = async (postId) => {
+  try {
+    const likesRef = collection(store, "posts", postId, "likes");
+    const likesDocs = await getDocs(likesRef);
+    return likesDocs.docs?.length;
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 export {
   uploadDisplayPicture,
   checkIfUsernameTaken,
@@ -333,4 +344,5 @@ export {
   likePost,
   unLikePost,
   checkIfUserLikedPost,
+  getLikeCount,
 };

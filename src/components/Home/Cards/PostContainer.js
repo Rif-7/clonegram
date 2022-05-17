@@ -5,11 +5,13 @@ import {
   likePost,
   unLikePost,
   checkIfUserLikedPost,
+  getLikeCount,
 } from "../../../FirebaseFunctions";
 
 const PostContainer = ({ title, caption, imgUrl, timeStamp, userId, id }) => {
   const [username, setUsername] = useState("loading");
   const [isLiked, setIsLiked] = useState(null);
+  const [postLikes, setPostLikes] = useState(0);
   useEffect(() => {
     handleUsername();
     handleLike();
@@ -21,11 +23,16 @@ const PostContainer = ({ title, caption, imgUrl, timeStamp, userId, id }) => {
   };
 
   const handleLike = async () => {
-    const result = await checkIfUserLikedPost(id);
-    if (result === "error") {
+    const postLikes = await getLikeCount(id);
+    if (postLikes !== "error" && postLikes) {
+      setPostLikes(postLikes);
+    }
+
+    const userLiked = await checkIfUserLikedPost(id);
+    if (userLiked === "error") {
       return;
     }
-    setIsLiked(result);
+    setIsLiked(!!userLiked);
   };
 
   const onLikeClicked = async () => {
@@ -37,6 +44,7 @@ const PostContainer = ({ title, caption, imgUrl, timeStamp, userId, id }) => {
       return;
     }
     setIsLiked(true);
+    setPostLikes(postLikes + 1);
   };
 
   const onUnlikeClicked = async () => {
@@ -48,6 +56,7 @@ const PostContainer = ({ title, caption, imgUrl, timeStamp, userId, id }) => {
       return;
     }
     setIsLiked(false);
+    setPostLikes(postLikes - 1);
   };
 
   return (
@@ -61,11 +70,11 @@ const PostContainer = ({ title, caption, imgUrl, timeStamp, userId, id }) => {
       <img src={imgUrl} alt="post" className="post-image"></img>
       {isLiked ? (
         <button className="like-btn liked-btn" onClick={onUnlikeClicked}>
-          Liked
+          ❤️<span className="like-info">{postLikes}</span>
         </button>
       ) : (
         <button className="like-btn" onClick={onLikeClicked}>
-          Like
+          🤍<span className="like-info">{postLikes}</span>
         </button>
       )}
 

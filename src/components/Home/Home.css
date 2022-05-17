@@ -79,16 +79,16 @@ p {
     width: fit-content;
     padding: 2px 4px;
     font-family: "Roboto Mono", monospace;
+    background-color: white;
     border-radius: 4px;
     font-size: 18px;
     margin: 5px;
-
     border: 2px solid white;
+    transition: 200ms;
 }
 
-.post-view .liked-btn {
-    background-color: red;
-    color: white;
+.post-view .like-btn:hover {
+    transform: translateX(5px);
 }
 
 .post-user {
@@ -100,4 +100,8 @@ p {
     width: 100%;
     box-sizing: border-box;
     padding: 0px 5px;
+}
+
+.like-info {
+    font-family: monospace;
 }
