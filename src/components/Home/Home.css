@@ -1,6 +1,7 @@
 .home {
     background-color: #AFC1D6;
     min-height: calc(100vh - var(--navbar-height));
+    font-family: "Roboto Mono";
 }
 
 p {
@@ -104,4 +105,23 @@ p {
 
 .like-info {
     font-family: monospace;
+}
+
+.home-alert {
+    background-color: #CEC9F2;
+    padding: 5px 10px;
+    font-size: 24px;
+    font-weight: 700;
+    border-radius: 4px;
+}
+
+.show-all {
+    background-color: #d6ca98;
+    font-size: 20px;
+    border-radius: 4px;
+    padding: 5px 10px;
+}
+
+.show-all:hover {
+    text-decoration: underline;
 }

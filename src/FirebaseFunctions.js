@@ -156,6 +156,40 @@ const getLatestPosts = async () => {
   }
 };
 
+const getFollowersPosts = async () => {
+  const signedUser = getSignedInUser();
+  if (!signedUser.uid) {
+    return "error";
+  }
+  try {
+    const userInfo = await getUserInfo(signedUser.uid);
+    const followersRef = collection(
+      store,
+      "users",
+      userInfo.refId,
+      "following"
+    );
+    const followingUsersSnap = await getDocs(followersRef);
+    const followersList = followingUsersSnap.docs.map((user) => user.id);
+    if (!followersList.length) {
+      return "error/no-followings";
+    }
+    const followersPostQuery = query(
+      collection(store, "posts"),
+      where("uid", "in", followersList),
+      limit(20)
+    );
+    const followersPostSnap = await getDocs(followersPostQuery);
+    return followersPostSnap.docs.map((post) => {
+      const timeStamp = convertTimeStamp(post.data());
+      return { ...post.data(), timeStamp, id: post.id };
+    });
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 const addUserToFollowersList = async (signedUsersId, followingUsersId) => {
   try {
     const userSnap = await getUserInfo(signedUsersId);
@@ -345,4 +379,5 @@ export {
   unLikePost,
   checkIfUserLikedPost,
   getLikeCount,
+  getFollowersPosts,
 };
