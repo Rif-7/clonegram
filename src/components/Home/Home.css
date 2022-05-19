@@ -2,6 +2,9 @@
     background-color: #AFC1D6;
     min-height: calc(100vh - var(--navbar-height));
     font-family: "Roboto Mono";
+
+    display: grid;
+    grid-template-columns: 1fr 300px;
 }
 
 p {
@@ -125,3 +128,80 @@ p {
 .show-all:hover {
     text-decoration: underline;
 }
+
+.sidebar {
+    margin-top: 30px;
+    background-color: #3d405b;
+    height: min-content;
+    width: 250px;
+    padding: 10px;
+    color: white;
+    border-radius: 4px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sort-field {
+    display: flex;
+    gap: 4px;
+}
+
+.search-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.search-field input {
+    border: 2px solid white;
+    flex: 1 1 auto;
+    width: auto !important;
+    height: 20px;
+    background-color: #3d405b;
+    color: white;
+}
+
+.search-field input:focus {
+    outline: none;
+}
+
+.search-field ul {
+    padding: 0px 8px;
+    margin: 0px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.search-field ul li {
+    padding: 2px 8px;
+    background-color: #655A7C;
+    width: 90%;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-field ul li a {
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.search-field ul li:hover a {
+    text-decoration: underline;
+    color: white !important;
+}
+
+.sidebar select {
+    font-family: "Roboto Mono";
+    font-size: 16px;
+    border-radius: 4px;
+    border: 2px solid white;
+    background-color: #3d405b;
+    color: white;
+    flex: 1 1 auto;
+    
+}
+

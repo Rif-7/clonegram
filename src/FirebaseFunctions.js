@@ -361,6 +361,33 @@ const getLikeCount = async (postId) => {
   }
 };
 
+const getSimilarUsers = async (usernameChunk) => {
+  try {
+    // queries users whose username field starts with the usernameChunk
+    const userQuery = query(
+      collection(store, "users"),
+      where("username", ">=", usernameChunk),
+      limit(3)
+    );
+    const usersSnap = await getDocs(userQuery);
+    if (!usersSnap.docs.length) {
+      return "error";
+    }
+    const userList = usersSnap.docs.map((user) => {
+      const { uid, username } = user.data();
+      return {
+        uid,
+        username,
+      };
+    });
+
+    return userList.filter((user) => user.username.startsWith(usernameChunk));
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 export {
   uploadDisplayPicture,
   checkIfUsernameTaken,
@@ -380,4 +407,5 @@ export {
   checkIfUserLikedPost,
   getLikeCount,
   getFollowersPosts,
+  getSimilarUsers,
 };
