@@ -3,35 +3,18 @@ import { getFollowersPosts, getLatestPosts } from "../../FirebaseFunctions";
 import LoadingFormIndicator from "../Register/Forms/LoadingFormIndicator";
 import PostContainer from "./Cards/PostContainer";
 
-const UserHomePage = () => {
+const UserHomePage = ({ filter, updateFilter }) => {
   const [posts, setPosts] = useState([]);
   const [alert, setAlert] = useState(null);
-  const [filter, setFilter] = useState(null);
   useEffect(() => {
     handlePosts();
-  }, []);
-
-  useEffect(() => {
-    if (!filter) {
-      return;
-    }
-    filterPosts();
   }, [filter]);
 
   const handlePosts = async () => {
-    const result = await getFollowersPosts();
-    if (result === "error") {
-      return;
-    } else if (result === "error/no-followings") {
-      setAlert("Not Following Anyone");
-      return;
-    }
-    setPosts(result.reverse());
-  };
-
-  const filterPosts = async () => {
+    setAlert(null);
+    setPosts([]);
     switch (filter) {
-      case "public":
+      case "all":
         const publicPosts = await getLatestPosts();
         if (publicPosts === "error") {
           return;
@@ -39,24 +22,39 @@ const UserHomePage = () => {
         setPosts(publicPosts.reverse());
         return;
 
+      case "following":
+        const followersPosts = await getFollowersPosts("following");
+        if (followersPosts === "error") {
+          return;
+        } else if (followersPosts === "error/no-followings") {
+          setAlert("You're Not Following Anyone");
+          return;
+        }
+        setPosts(followersPosts.reverse());
+        return;
+
+      case "followers":
+        const followingUsersPost = await getFollowersPosts("followers");
+        if (followingUsersPost === "error") {
+          return;
+        } else if (followingUsersPost === "error/no-followings") {
+          setAlert("You've No Followers");
+          return;
+        }
+        setPosts(followingUsersPost.reverse());
+        return;
+
       default:
+        setAlert("Invalid Filter");
         return;
     }
-  };
-
-  const updateFilter = (filterName) => {
-    if (filter === filterName) {
-      return;
-    }
-    setFilter(filterName);
-    setAlert(null);
   };
 
   if (alert) {
     return (
       <div className="home-container">
         <div className="home-alert">{alert}</div>
-        <div className="show-all" onClick={() => updateFilter("public")}>
+        <div className="show-all" onClick={() => updateFilter("all")}>
           Show All Posts
         </div>
       </div>

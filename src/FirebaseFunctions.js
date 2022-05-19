@@ -156,19 +156,14 @@ const getLatestPosts = async () => {
   }
 };
 
-const getFollowersPosts = async () => {
+const getFollowersPosts = async (filter) => {
   const signedUser = getSignedInUser();
   if (!signedUser.uid) {
     return "error";
   }
   try {
     const userInfo = await getUserInfo(signedUser.uid);
-    const followersRef = collection(
-      store,
-      "users",
-      userInfo.refId,
-      "following"
-    );
+    const followersRef = collection(store, "users", userInfo.refId, filter);
     const followingUsersSnap = await getDocs(followersRef);
     const followersList = followingUsersSnap.docs.map((user) => user.id);
     if (!followersList.length) {

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getSimilarUsers } from "../../../FirebaseFunctions";
 
-const Sidebar = () => {
+const Sidebar = ({ changeFilter, filter }) => {
   const userInfo = useSelector((state) => state.user);
   const [usernameField, setUsernameField] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -32,6 +32,8 @@ const Sidebar = () => {
     setIsSearching(false);
   };
 
+  const updateFilter = (e) => changeFilter(e.target.value);
+
   const renderedUsers = () => {
     if (isSearching) {
       return <span>Loading</span>;
@@ -57,7 +59,12 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="sort-field">
         <label htmlFor="sort-posts">Sort by:</label>
-        <select id="sort-posts" name="sort">
+        <select
+          id="sort-posts"
+          value={filter}
+          name="sort"
+          onChange={updateFilter}
+        >
           {userInfo.user ? (
             <optgroup label="Users">
               <option value="following">Following</option>
