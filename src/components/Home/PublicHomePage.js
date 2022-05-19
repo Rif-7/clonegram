@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getLatestPosts } from "../../FirebaseFunctions";
 
 import PostContainer from "./Cards/PostContainer";
-import LoadingFormIndicator from "../Register/Forms/LoadingFormIndicator";
+import ReactLoading from "react-loading";
 
 const PublicHomePage = () => {
   const [posts, setPosts] = useState([]);
@@ -21,7 +21,7 @@ const PublicHomePage = () => {
   return (
     <div className="public-home-page home-container">
       {posts.length === 0 ? (
-        <LoadingFormIndicator />
+        <ReactLoading type="spin" color="#3d405b" height="60px" width="60px" />
       ) : (
         posts.map((post, index) => (
           <PostContainer

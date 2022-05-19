@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getFollowersPosts, getLatestPosts } from "../../FirebaseFunctions";
-import LoadingFormIndicator from "../Register/Forms/LoadingFormIndicator";
 import PostContainer from "./Cards/PostContainer";
+import ReactLoading from "react-loading";
 
 const UserHomePage = ({ filter, updateFilter }) => {
   const [posts, setPosts] = useState([]);
@@ -64,7 +64,7 @@ const UserHomePage = ({ filter, updateFilter }) => {
   return (
     <div className="user-home-page home-container">
       {posts.length === 0 ? (
-        <LoadingFormIndicator />
+        <ReactLoading type="spin" color="#3d405b" height="60px" width="60px" />
       ) : (
         posts.map((post, index) => (
           <PostContainer
