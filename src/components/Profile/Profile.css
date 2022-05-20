@@ -107,8 +107,19 @@
     transition: 300ms;
 }
 
-.update-btn:hover {
+.update-btn:hover, .post-modal .submit-btn:hover {
     transform: translateX(5px);
+}
+
+.post-modal .submit-btn {
+    margin-right: 8px;
+    width: max-content;
+    font-family: "Roboto Mono", monospace !important;
+    font-size: 20px !important;
+}
+
+.post-modal .delete-btn {
+    background-color: red;
 }
 
 

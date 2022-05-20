@@ -138,6 +138,20 @@ const updatePost = async (postRefId, updatedTitle, updatedCaption) => {
   }
 };
 
+const deletePost = async (postRefId) => {
+  const signedUser = getSignedInUser();
+  if (!signedUser.user) {
+    return "error";
+  }
+  try {
+    const postRef = doc(store, "posts", postRefId);
+    return await deleteDoc(postRef);
+  } catch (error) {
+    console.log(error);
+    return "error";
+  }
+};
+
 const getLatestPosts = async () => {
   try {
     const postQuery = query(
@@ -403,4 +417,5 @@ export {
   getLikeCount,
   getFollowersPosts,
   getSimilarUsers,
+  deletePost,
 };

@@ -1,5 +1,10 @@
 import React, { useEffect, useState, useLayoutEffect } from "react";
-import { getPostInfo, updatePost } from "../../../FirebaseFunctions";
+import { Navigate } from "react-router-dom";
+import {
+  getPostInfo,
+  updatePost,
+  deletePost,
+} from "../../../FirebaseFunctions";
 import LoadingFormIndicator from "../../Register/Forms/LoadingFormIndicator";
 
 const PostModal = ({ id, onCloseClicked, isAuthor }) => {
@@ -34,6 +39,17 @@ const PostModal = ({ id, onCloseClicked, isAuthor }) => {
       return;
     }
     return await updatePost(id, updatedTitle, updatedCaption);
+  };
+
+  const onDeleteClicked = async () => {
+    setIsUpdating(true);
+    const result = await deletePost(id);
+    if (result === "error") {
+      setIsUpdating(false);
+      return;
+    }
+    // run onClose Clicked with the reRender parameter set to true;
+    onCloseClicked(true);
   };
 
   const handleEditMode = async (e) => {
@@ -101,9 +117,17 @@ const PostModal = ({ id, onCloseClicked, isAuthor }) => {
               (isUpdating ? (
                 <LoadingFormIndicator />
               ) : (
-                <button className="submit-btn" onClick={handleEditMode}>
-                  Update
-                </button>
+                <div>
+                  <button className="submit-btn" onClick={handleEditMode}>
+                    Update
+                  </button>
+                  <button
+                    className="submit-btn delete-btn"
+                    onClick={onDeleteClicked}
+                  >
+                    Delete
+                  </button>
+                </div>
               ))}
           </>
         )}

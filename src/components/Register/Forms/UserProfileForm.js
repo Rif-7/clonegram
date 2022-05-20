@@ -31,7 +31,7 @@ const UserProfileForm = ({ createUserProfile }) => {
       });
   };
 
-  // remove the custom error if there are any other errors
+  // remove the custom error if there are other errors
   const error = errors[Object.keys(errors)[0]]?.message;
   if (error && customError) {
     setCustomError(null);
