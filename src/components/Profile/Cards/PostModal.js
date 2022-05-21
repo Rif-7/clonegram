@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useLayoutEffect } from "react";
-import { Navigate } from "react-router-dom";
 import {
   getPostInfo,
   updatePost,
