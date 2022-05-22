@@ -15,6 +15,7 @@ import {
   orderBy,
   setDoc,
   deleteDoc,
+  startAfter,
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
@@ -152,18 +153,29 @@ const deletePost = async (postRefId) => {
   }
 };
 
-const getLatestPosts = async () => {
+const getLatestPosts = async (lastPost = null) => {
   try {
-    const postQuery = query(
+    let postQuery = query(
       collection(store, "posts"),
-      orderBy("timeStamp"),
-      limit(15)
+      orderBy("timeStamp", "desc"),
+      limit(3)
     );
+    if (lastPost) {
+      postQuery = query(
+        collection(store, "posts"),
+        orderBy("timeStamp", "desc"),
+        limit(3),
+        startAfter(lastPost)
+      );
+    }
     const postsSnap = await getDocs(postQuery);
-    return postsSnap.docs.map((post) => {
+    const lastPostDoc = postsSnap.docs.at(-1);
+    const postsList = postsSnap.docs.map((post) => {
       const timeStamp = convertTimeStamp(post.data());
       return { ...post.data(), id: post.id, timeStamp };
     });
+
+    return { posts: postsList, lastDoc: lastPostDoc };
   } catch (error) {
     console.log(error);
     return "error";

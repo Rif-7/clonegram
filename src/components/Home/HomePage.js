@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Sidebar from "./Cards/Sidebar";
@@ -12,12 +12,39 @@ const HomePage = () => {
 
   const changeFilter = (newFilter) => setFilter(newFilter);
 
+  const useIntersection = (element, rootMargin) => {
+    const [isVisible, setState] = useState(false);
+
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setState(true);
+          } else {
+            setState(false);
+          }
+        },
+        { rootMargin }
+      );
+
+      element.current && observer.observe(element.current);
+
+      return () => element.current && observer.unobserve(element.current);
+    }, []);
+
+    return isVisible;
+  };
+
   return (
     <div className="home">
       {userInfo.user ? (
-        <UserHomePage filter={filter} updateFilter={changeFilter} />
+        <UserHomePage
+          filter={filter}
+          updateFilter={changeFilter}
+          useIntersection={useIntersection}
+        />
       ) : (
-        <PublicHomePage />
+        <PublicHomePage useIntersection={useIntersection} />
       )}
       <Sidebar changeFilter={changeFilter} filter={filter} />
       <Link to="/new-post">

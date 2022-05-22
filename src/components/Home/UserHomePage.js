@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getFollowersPosts, getLatestPosts } from "../../FirebaseFunctions";
 import PostContainer from "./Cards/PostContainer";
 import ReactLoading from "react-loading";
@@ -6,20 +6,57 @@ import ReactLoading from "react-loading";
 const UserHomePage = ({ filter, updateFilter }) => {
   const [posts, setPosts] = useState([]);
   const [alert, setAlert] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLastDivVisible, setIsLastDivVisible] = useState(false);
+  const [lastPost, setLastPost] = useState(null);
+  const lastDiv = useRef();
+
   useEffect(() => {
+    window.addEventListener("scroll", scrollHandler);
+    setLastPost(null);
     handlePosts();
+
+    return () => window.removeEventListener("scroll", scrollHandler);
   }, [filter]);
 
-  const handlePosts = async () => {
+  const scrollHandler = () => {
+    if (isLoading) {
+      return;
+    } else if (
+      lastDiv.current &&
+      window.pageYOffset + window.innerHeight >= lastDiv.current.offsetTop
+    ) {
+      console.log("here");
+      updateVisibility(true);
+    }
+  };
+
+  const updateVisibility = (value) =>
+    value !== isLastDivVisible ? setIsLastDivVisible(value) : null;
+
+  const handlePosts = async (filterChanged = true) => {
+    let lastPosts = posts;
+    if (filterChanged) {
+      lastPosts = [];
+      setLastPost(null);
+      setPosts([]);
+    } else {
+      setIsLoading(true);
+    }
     setAlert(null);
-    setPosts([]);
     switch (filter) {
       case "all":
-        const publicPosts = await getLatestPosts();
+        const publicPosts = await getLatestPosts(lastPost);
         if (publicPosts === "error") {
           return;
         }
-        setPosts(publicPosts.reverse());
+        if (lastPost === publicPosts.lastDoc) {
+          return;
+        }
+        setLastPost(publicPosts.lastDoc);
+        setPosts(lastPosts.concat(publicPosts.posts));
+        setIsLoading(false);
+        setIsLastDivVisible(false);
         return;
 
       case "following":
@@ -42,6 +79,7 @@ const UserHomePage = ({ filter, updateFilter }) => {
           return;
         }
         setPosts(followingUsersPost.reverse());
+        setIsLoading(false);
         return;
 
       default:
@@ -59,6 +97,8 @@ const UserHomePage = ({ filter, updateFilter }) => {
         </div>
       </div>
     );
+  } else if (isLastDivVisible && !isLoading) {
+    handlePosts(false);
   }
 
   return (
@@ -66,17 +106,20 @@ const UserHomePage = ({ filter, updateFilter }) => {
       {posts.length === 0 ? (
         <ReactLoading type="spin" color="#3d405b" height="60px" width="60px" />
       ) : (
-        posts.map((post, index) => (
-          <PostContainer
-            title={post.postTitle}
-            caption={post.postCaption}
-            imgUrl={post.postImage}
-            timeStamp={post.timeStamp}
-            userId={post.uid}
-            id={post.id}
-            key={index}
-          />
-        ))
+        <>
+          {posts.map((post, index) => (
+            <PostContainer
+              title={post.postTitle}
+              caption={post.postCaption}
+              imgUrl={post.postImage}
+              timeStamp={post.timeStamp}
+              userId={post.uid}
+              id={post.id}
+              key={index}
+            />
+          ))}
+          <div ref={lastDiv}></div>
+        </>
       )}
     </div>
   );
