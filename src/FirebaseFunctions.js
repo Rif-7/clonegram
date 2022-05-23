@@ -158,13 +158,13 @@ const getLatestPosts = async (lastPost = null) => {
     let postQuery = query(
       collection(store, "posts"),
       orderBy("timeStamp", "desc"),
-      limit(3)
+      limit(5)
     );
     if (lastPost) {
       postQuery = query(
         collection(store, "posts"),
         orderBy("timeStamp", "desc"),
-        limit(3),
+        limit(5),
         startAfter(lastPost)
       );
     }
@@ -182,7 +182,7 @@ const getLatestPosts = async (lastPost = null) => {
   }
 };
 
-const getFollowersPosts = async (filter) => {
+const getFollowersPosts = async (filter, lastPost = null) => {
   const signedUser = getSignedInUser();
   if (!signedUser.uid) {
     return "error";
@@ -195,16 +195,28 @@ const getFollowersPosts = async (filter) => {
     if (!followersList.length) {
       return "error/no-followings";
     }
-    const followersPostQuery = query(
+    let followersPostQuery = query(
       collection(store, "posts"),
       where("uid", "in", followersList),
-      limit(20)
+      orderBy("timeStamp", "desc"),
+      limit(5)
     );
+    if (lastPost) {
+      followersPostQuery = query(
+        collection(store, "posts"),
+        where("uid", "in", followersList),
+        limit(5),
+        orderBy("timeStamp", "desc"),
+        startAfter(lastPost)
+      );
+    }
     const followersPostSnap = await getDocs(followersPostQuery);
-    return followersPostSnap.docs.map((post) => {
+    const lastDoc = followersPostSnap.docs.at(-1);
+    const postList = followersPostSnap.docs.map((post) => {
       const timeStamp = convertTimeStamp(post.data());
       return { ...post.data(), timeStamp, id: post.id };
     });
+    return { posts: postList, lastDoc };
   } catch (error) {
     console.log(error);
     return "error";

@@ -15,7 +15,6 @@ const UserHomePage = ({ filter, updateFilter }) => {
     window.addEventListener("scroll", scrollHandler);
     setLastPost(null);
     handlePosts();
-
     return () => window.removeEventListener("scroll", scrollHandler);
   }, [filter]);
 
@@ -26,7 +25,6 @@ const UserHomePage = ({ filter, updateFilter }) => {
       lastDiv.current &&
       window.pageYOffset + window.innerHeight >= lastDiv.current.offsetTop
     ) {
-      console.log("here");
       updateVisibility(true);
     }
   };
@@ -34,29 +32,18 @@ const UserHomePage = ({ filter, updateFilter }) => {
   const updateVisibility = (value) =>
     value !== isLastDivVisible ? setIsLastDivVisible(value) : null;
 
-  const handlePosts = async (filterChanged = true) => {
-    let lastPosts = posts;
-    if (filterChanged) {
-      lastPosts = [];
-      setLastPost(null);
-      setPosts([]);
-    } else {
-      setIsLoading(true);
-    }
+  const handlePosts = async () => {
+    setPosts([]);
+    setLastPost(null);
     setAlert(null);
     switch (filter) {
       case "all":
-        const publicPosts = await getLatestPosts(lastPost);
+        const publicPosts = await getLatestPosts();
         if (publicPosts === "error") {
           return;
         }
-        if (lastPost === publicPosts.lastDoc) {
-          return;
-        }
         setLastPost(publicPosts.lastDoc);
-        setPosts(lastPosts.concat(publicPosts.posts));
-        setIsLoading(false);
-        setIsLastDivVisible(false);
+        setPosts(publicPosts.posts);
         return;
 
       case "following":
@@ -67,25 +54,69 @@ const UserHomePage = ({ filter, updateFilter }) => {
           setAlert("You're Not Following Anyone");
           return;
         }
-        setPosts(followersPosts.reverse());
+        setLastPost(followersPosts.lastDoc);
+        setPosts(followersPosts.posts);
         return;
 
       case "followers":
-        const followingUsersPost = await getFollowersPosts("followers");
-        if (followingUsersPost === "error") {
+        const followingUsersPosts = await getFollowersPosts("followers");
+        if (followingUsersPosts === "error") {
           return;
-        } else if (followingUsersPost === "error/no-followings") {
+        } else if (followingUsersPosts === "error/no-followings") {
           setAlert("You've No Followers");
           return;
         }
-        setPosts(followingUsersPost.reverse());
-        setIsLoading(false);
+        setLastPost(followingUsersPosts.lastDoc);
+        setPosts(followingUsersPosts.posts);
         return;
 
       default:
         setAlert("Invalid Filter");
         return;
     }
+  };
+
+  const getMorePosts = async () => {
+    if (!lastPost) {
+      return;
+    }
+    setIsLoading(true);
+    switch (filter) {
+      case "all":
+        const publicPosts = await getLatestPosts(lastPost);
+        if (publicPosts === "error") {
+          return;
+        }
+        setLastPost(publicPosts.lastDoc);
+        setPosts(posts.concat(publicPosts.posts));
+        break;
+
+      case "following":
+        const followersPosts = await getFollowersPosts("following", lastPost);
+        if (followersPosts === "error") {
+          return;
+        }
+        setLastPost(followersPosts.lastDoc);
+        setPosts(posts.concat(followersPosts.posts));
+        break;
+
+      case "followers":
+        const followingUsersPosts = await getFollowersPosts(
+          "followers",
+          lastPost
+        );
+        if (followingUsersPosts === "error") {
+          return;
+        }
+        setLastPost(followingUsersPosts.lastDoc);
+        setPosts(posts.concat(followingUsersPosts.posts));
+        break;
+
+      default:
+        return;
+    }
+    setIsLoading(false);
+    setIsLastDivVisible(false);
   };
 
   if (alert) {
@@ -98,7 +129,7 @@ const UserHomePage = ({ filter, updateFilter }) => {
       </div>
     );
   } else if (isLastDivVisible && !isLoading) {
-    handlePosts(false);
+    getMorePosts();
   }
 
   return (
