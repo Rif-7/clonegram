@@ -9,4 +9,4 @@ A social media app made using React and Firebase where users can post photos, fo
 
 ## Live:
 
-    rif-7.github.io/clonegram
+    https://rif-7.github.io/clonegram
