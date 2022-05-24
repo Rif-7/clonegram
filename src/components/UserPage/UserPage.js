@@ -146,7 +146,7 @@ const UserPage = () => {
   }
 
   if (signedUser.uid === userId) {
-    return <Navigate replace to="/profile" />;
+    return <Navigate replace to="/clonegram/profile" />;
   }
 
   return (

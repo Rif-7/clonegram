@@ -24,7 +24,7 @@ const Navbar = () => {
   const renderedListItems = user ? (
     <>
       <li className="nav-link">
-        <Link to="profile">@{user}</Link>
+        <Link to="/clonegram/profile">@{user}</Link>
       </li>
       <li className="nav-link">
         <Link to="#" onClick={logoutUser}>
@@ -35,17 +35,17 @@ const Navbar = () => {
   ) : (
     <>
       <li className="nav-link">
-        <Link to="login">Login</Link>
+        <Link to="/clonegram/login">Login</Link>
       </li>
       <li className="nav-link">
-        <Link to="register">Register</Link>
+        <Link to="/clonegram/register">Register</Link>
       </li>
     </>
   );
 
   return (
     <nav>
-      <Link className="nav-header" to="/">
+      <Link className="nav-header" to="/clonegram">
         Clonegram
       </Link>
       <ul className="nav-links">{renderedListItems}</ul>

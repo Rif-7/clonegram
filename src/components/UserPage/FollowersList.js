@@ -13,7 +13,11 @@ const FollowersList = ({ followers, following }) => {
           {followers.map((user, index) => {
             const { username, timeStamp } = user.data();
             return (
-              <Link to={`/user/${user.id}`} className="follow-user" key={index}>
+              <Link
+                to={`/clonegram/user/${user.id}`}
+                className="follow-user"
+                key={index}
+              >
                 @{username}{" "}
                 <span>Since {timeStamp.toDate().toLocaleDateString()}</span>
               </Link>
@@ -27,7 +31,11 @@ const FollowersList = ({ followers, following }) => {
           {following.map((user, index) => {
             const { username, timeStamp } = user.data();
             return (
-              <Link to={`/user/${user.id}`} className="follow-user" key={index}>
+              <Link
+                to={`/clonegram/user/${user.id}`}
+                className="follow-user"
+                key={index}
+              >
                 @{username}{" "}
                 <span>Since {timeStamp.toDate().toLocaleDateString()}</span>
               </Link>

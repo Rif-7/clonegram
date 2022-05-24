@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import { initializeApp } from "firebase/app";
@@ -46,12 +46,13 @@ function App() {
     <BrowserRouter>
       <Navbar isLoggedIn={false} />
       <Routes>
-        <Route path="/" element={<HomePage />}></Route>
-        <Route path="login" element={<Login />}></Route>
-        <Route path="register" element={<Register />}></Route>
-        <Route path="profile" element={<Profile />}></Route>
-        <Route path="new-post" element={<NewPost />}></Route>
-        <Route path="user/:userId" element={<UserPage />}></Route>
+        <Route path="clonegram" element={<HomePage />}></Route>
+        <Route path="/clonegram/login" element={<Login />}></Route>
+        <Route path="/clonegram/register" element={<Register />}></Route>
+        <Route path="/clonegram/profile" element={<Profile />}></Route>
+        <Route path="/clonegram/new-post" element={<NewPost />}></Route>
+        <Route path="/clonegram/user/:userId" element={<UserPage />}></Route>
+        <Route path="*" element={<Navigate replace to="clonegram" />}></Route>
       </Routes>
     </BrowserRouter>
   );

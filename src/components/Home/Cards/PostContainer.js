@@ -61,7 +61,7 @@ const PostContainer = ({ title, caption, imgUrl, timeStamp, userId, id }) => {
 
   return (
     <div className="post-view">
-      <Link to={`/user/${userId}`} className="post-user">
+      <Link to={`/clonegram/user/${userId}`} className="post-user">
         @{username}
       </Link>
       <div className="title">

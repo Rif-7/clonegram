@@ -47,7 +47,7 @@ const HomePage = () => {
         <PublicHomePage useIntersection={useIntersection} />
       )}
       <Sidebar changeFilter={changeFilter} filter={filter} />
-      <Link to="/new-post">
+      <Link to="/clonegram/new-post">
         <button className="new-post-btn">New</button>
       </Link>
     </div>

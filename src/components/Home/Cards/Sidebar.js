@@ -45,7 +45,7 @@ const Sidebar = ({ changeFilter, filter }) => {
         {users.map((user, index) => {
           return (
             <li key={index}>
-              <Link replace to={`/user/${user.uid}`}>
+              <Link replace to={`/clonegram/user/${user.uid}`}>
                 @{user.username}
               </Link>
             </li>
